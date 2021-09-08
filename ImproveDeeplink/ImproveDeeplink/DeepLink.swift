@@ -19,7 +19,6 @@ enum DeepLinkError: Error {
 
 enum DeepLinkRequest {
 
-
     case dashboard
 
     case vendorHome
@@ -105,16 +104,6 @@ final class DeepLinkNavigator: DeepLinkHandler {
     }
 
 }
-
-final class DeepLinkNode {
-    let current: DeepLinkRequest
-    let next: DeepLinkNode?
-    init(current: DeepLinkRequest, next: DeepLinkNode?) {
-        self.current = current
-        self.next = next
-    }
-}
-
 
 final class CancelBag: Hashable {
     static func == (lhs: CancelBag, rhs: CancelBag) -> Bool {
