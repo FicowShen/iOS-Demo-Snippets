@@ -23,6 +23,7 @@ enum DeepLinkRequest {
 
     case vendorHome
     case vendorBrowse
+    case vendorStorefront
 
     case registryOverview
     case registryCategory(id: String)
@@ -65,16 +66,19 @@ final class DeepLinkNavigator: DeepLinkHandler {
 
     func parsePath(request: DeepLinkRequest) -> [DeepLinkRequest] {
         switch request {
-        case .dashboard:
+        // tab
+        case .dashboard, .vendorHome, .registryOverview:
             return []
+        // vendor
         case .vendorBrowse:
             return [.vendorHome]
+        case .vendorStorefront:
+            return [.vendorHome, .vendorBrowse]
+        // registry
         case .registryCategory:
             return [.registryOverview]
         case .registryProduct:
             return [.registryOverview]
-        default:
-            fatalError()
         }
     }
 
