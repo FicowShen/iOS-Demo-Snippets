@@ -11,7 +11,7 @@ import Combine
 final class TabVC: UITabBarController, DeepLinkHandler {
     override func viewDidLoad() {
         super.viewDidLoad()
-        let vcs = [DashboardVC(), VendorHomeVC()].map { UINavigationController(rootViewController: $0) }
+        let vcs = [TabOneRootVC(), TabTwoRootVC()].map { UINavigationController(rootViewController: $0) }
         setViewControllers(vcs, animated: false)
         tabBar.items?.enumerated().forEach {
             let nav = viewControllers![$0] as! UINavigationController
@@ -21,12 +21,12 @@ final class TabVC: UITabBarController, DeepLinkHandler {
 
     func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError> {
         switch request {
-        case .dashboard:
+        case .tabOneRoot:
             return Future { [weak self] promise in
                 self?.selectedIndex = 0
                 promise(.success(nil))
             }.eraseToAnyPublisher()
-        case .vendorHome:
+        case .tabTwoRoot:
             (viewControllers?[1] as? UINavigationController)?.popToRootViewController(animated: false)
             return Future { [weak self] promise in
                 self?.setupVendorHome(promise: promise)
@@ -41,7 +41,7 @@ final class TabVC: UITabBarController, DeepLinkHandler {
         // some async code
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             guard let nav = self.selectedViewController as? UINavigationController,
-                  let vendorHome = nav.topViewController as? VendorHomeVC else {
+                  let vendorHome = nav.topViewController as? TabTwoRootVC else {
                 promise(.failure(.unexpected(message: "fail to load VendorHomeVC")))
                 return
             }

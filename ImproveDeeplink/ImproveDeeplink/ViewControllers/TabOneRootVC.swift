@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class DashboardVC: BaseVC, DeepLinkHandler {
+final class TabOneRootVC: BaseVC, DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError> {
         fatalError()
     }

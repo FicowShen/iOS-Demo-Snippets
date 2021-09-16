@@ -8,11 +8,11 @@
 import UIKit
 import Combine
 
-class VendorHomeVC: BaseVC, DeepLinkHandler {
+class TabTwoRootVC: BaseVC, DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError> {
         switch request {
-        case .vendorBrowse:
-            let vc = VendorBrowseVC()
+        case .tabTwoSecond:
+            let vc = TabTwoSecondVC()
             navigationController?.pushViewController(vc, animated: false)
             return Just(vc)
                 .setFailureType(to: DeepLinkError.self)
@@ -23,11 +23,11 @@ class VendorHomeVC: BaseVC, DeepLinkHandler {
     }
 }
 
-class VendorBrowseVC: BaseVC, DeepLinkHandler {
+class TabTwoSecondVC: BaseVC, DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError> {
         switch request {
-        case .vendorStorefront:
-            let vc = VendorStorefrontVC()
+        case .tabTwoThird:
+            let vc = TabTwoThirdVC()
             navigationController?.pushViewController(vc, animated: false)
             return Just(nil)
                 .setFailureType(to: DeepLinkError.self)
@@ -38,4 +38,4 @@ class VendorBrowseVC: BaseVC, DeepLinkHandler {
     }
 }
 
-class VendorStorefrontVC: BaseVC {}
+class TabTwoThirdVC: BaseVC {}

@@ -18,16 +18,16 @@ enum DeepLinkError: Error {
 }
 
 enum DeepLinkRequest {
-
-    case dashboard
-
-    case vendorHome
-    case vendorBrowse
-    case vendorStorefront
-
-    case registryOverview
-    case registryCategory(id: String)
-    case registryProduct(name: String)
+    // tab 1
+    case tabOneRoot
+    // tab 2
+    case tabTwoRoot
+    case tabTwoSecond
+    case tabTwoThird
+    // tab 3
+    case tabThreeRoot
+    case tabThreePathOne(id: String)
+    case tabThreePathTwo(name: String)
 }
 
 final class DeepLinkNavigator: DeepLinkHandler {
@@ -66,19 +66,19 @@ final class DeepLinkNavigator: DeepLinkHandler {
 
     func parsePath(request: DeepLinkRequest) -> [DeepLinkRequest] {
         switch request {
-        // tab
-        case .dashboard, .vendorHome, .registryOverview:
+        // tab root
+        case .tabOneRoot, .tabTwoRoot, .tabThreeRoot:
             return []
-        // vendor
-        case .vendorBrowse:
-            return [.vendorHome]
-        case .vendorStorefront:
-            return [.vendorHome, .vendorBrowse]
-        // registry
-        case .registryCategory:
-            return [.registryOverview]
-        case .registryProduct:
-            return [.registryOverview]
+        // tab 2
+        case .tabTwoSecond:
+            return [.tabTwoRoot]
+        case .tabTwoThird:
+            return [.tabTwoRoot, .tabTwoSecond]
+        // tab 3
+        case .tabThreePathOne:
+            return [.tabThreeRoot]
+        case .tabThreePathTwo:
+            return [.tabThreeRoot]
         }
     }
 

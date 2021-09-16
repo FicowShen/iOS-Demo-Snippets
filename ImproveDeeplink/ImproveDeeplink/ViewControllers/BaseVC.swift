@@ -25,9 +25,9 @@ class BaseVC: UIViewController {
     @objc func showActions() {
         let sheet = UIAlertController(title: "DeepLink Actions", message: nil, preferredStyle: .actionSheet)
         let deeplinkRequests: [DeepLinkRequest] = [
-            .dashboard, .vendorBrowse, .vendorStorefront,
-            .registryProduct(name: "PC"),
-            .registryCategory(id: "123"),
+            .tabOneRoot, .tabTwoSecond, .tabTwoThird,
+            .tabThreePathTwo(name: "PC"),
+            .tabThreePathOne(id: "123"),
         ]
         deeplinkRequests.forEach { request in
             let action = UIAlertAction(title: String(describing: request), style: .default, handler: { _ in
