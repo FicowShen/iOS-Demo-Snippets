@@ -29,7 +29,7 @@ final class TabTwoSecondVC: BaseVC, DeepLinkHandler {
         case .tabTwoThird:
             let vc = TabTwoThirdVC()
             navigationController?.pushViewController(vc, animated: false)
-            return Just(nil)
+            return Just(vc)
                 .setFailureType(to: DeepLinkError.self)
                 .eraseToAnyPublisher()
         default: break
@@ -38,4 +38,4 @@ final class TabTwoSecondVC: BaseVC, DeepLinkHandler {
     }
 }
 
-final class TabTwoThirdVC: BaseVC {}
+final class TabTwoThirdVC: BaseVC, DeepLinkHandler {}
