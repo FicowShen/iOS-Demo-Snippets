@@ -25,7 +25,8 @@ class BaseVC: UIViewController {
     @objc func showActions() {
         let sheet = UIAlertController(title: "DeepLink Actions", message: nil, preferredStyle: .actionSheet)
         let deeplinkRequests: [DeepLinkRequest] = [
-            .tabOneRoot, .tabTwoSecond, .tabTwoThird,
+            .tabOneRoot, .tabOneLastPageA, .tabOneLastPageB,
+            .tabTwoSecond, .tabTwoThird,
             .tabThreePathTwo(name: "PC"),
             .tabThreePathOne(id: "123"),
         ]
@@ -35,7 +36,7 @@ class BaseVC: UIViewController {
                     .shared
                     .handle(request: request)
                     .sink { completion in
-                        debugLog(completion)
+                        debugLog("finished deeplink request: \(request)")
                     } receiveValue: { handler in
                         debugLog(handler)
                     }

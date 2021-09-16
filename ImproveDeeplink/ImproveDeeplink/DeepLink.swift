@@ -20,6 +20,11 @@ enum DeepLinkError: Error {
 enum DeepLinkRequest {
     // tab 1
     case tabOneRoot
+    // A/B Test pages
+    case tabOneTestPageA
+    case tabOneTestPageB
+    case tabOneLastPageA
+    case tabOneLastPageB
     // tab 2
     case tabTwoRoot
     case tabTwoSecond
@@ -59,7 +64,7 @@ final class DeepLinkNavigator: DeepLinkHandler {
             self.cancelBags.remove(cancelBag)
         } receiveValue: { [unowned self] handler in
             subject.send(self)
-        }.store(in: &cancelBag.cancellables)
+        }.store(in: cancelBag)
 
         return subject.eraseToAnyPublisher()
     }
@@ -69,6 +74,13 @@ final class DeepLinkNavigator: DeepLinkHandler {
         // tab root
         case .tabOneRoot, .tabTwoRoot, .tabThreeRoot:
             return []
+        // tab 1
+        case .tabOneTestPageA, .tabOneTestPageB:
+            return [.tabOneRoot]
+        case .tabOneLastPageA:
+            return [.tabOneRoot, .tabOneTestPageA]
+        case .tabOneLastPageB:
+            return [.tabOneRoot, .tabOneTestPageB]
         // tab 2
         case .tabTwoSecond:
             return [.tabTwoRoot]
@@ -95,8 +107,8 @@ final class DeepLinkNavigator: DeepLinkHandler {
                 case .failure(let error):
                     promise(.failure(error))
                 case .finished:
-                    debugLog("finished request:", request,
-                             "for path:", path.map { String(describing: $0) })
+//                    debugLog("finished request:", request, "for path:", path.map { String(describing: $0) })
+                    break
                 }
             } receiveValue: { [unowned self] nextHandler in
                 self.handlePath(path.dropLast(),
@@ -104,7 +116,7 @@ final class DeepLinkNavigator: DeepLinkHandler {
                                 cancelBag: cancelBag,
                                 promise: promise)
             }
-            .store(in: &cancelBag.cancellables)
+            .store(in: cancelBag)
     }
 
 }
@@ -119,5 +131,11 @@ final class CancelBag: Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+extension AnyCancellable {
+    func store(in bag: CancelBag) {
+        store(in: &bag.cancellables)
     }
 }
