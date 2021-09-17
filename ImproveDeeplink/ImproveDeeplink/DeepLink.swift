@@ -9,18 +9,18 @@ import UIKit
 import Combine
 
 protocol DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError>
+    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError>
 }
 
 extension DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError> {
-        Fail(error: .unexpected(message: "\(request) is not handled by \(self)")).eraseToAnyPublisher()
+    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+        return .next(self)
     }
 }
 
 enum DeepLinkError: Error {
-    case unknownRequest
-    case unexpected(message: String)
+    case notHandled(by: DeepLinkHandler)
+    case failToHandle(by: DeepLinkHandler?)
 }
 
 enum DeepLinkRequest {
@@ -49,9 +49,9 @@ final class DeepLinkNavigator: DeepLinkHandler {
     private var cancelBags = Set<CancelBag>()
 
     @discardableResult
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
         guard let rootHandler = rootDeepLinkHandler else {
-            return Future { $0(.failure(.unexpected(message: "rootDeepLinkHandler is nil"))) }.eraseToAnyPublisher()
+            return .failToHandle(by: self)
         }
         let rawPath = parsePath(request: request) + [request]
         let path = Array(rawPath.reversed())
@@ -59,21 +59,25 @@ final class DeepLinkNavigator: DeepLinkHandler {
         let cancelBag = CancelBag()
         cancelBags.insert(cancelBag)
 
-        let tracer = PassthroughSubject<DeepLinkHandler?, DeepLinkError>()
-        handlePath(path,
-                   handler: rootHandler,
-                   cancelBag: cancelBag,
-                   tracer: tracer)
-
-        let output = PassthroughSubject<DeepLinkHandler?, DeepLinkError>()
-        tracer.sink { [unowned self] completion in
-            output.send(completion: completion)
-            self.cancelBags.remove(cancelBag)
-        } receiveValue: { handler in
-            output.send(handler)
-        }.store(in: cancelBag)
-
-        return output.eraseToAnyPublisher()
+        let tracer = PassthroughSubject<DeepLinkHandler, DeepLinkError>()
+        let sharedTracer = tracer.share()
+        sharedTracer
+            .handleEvents(receiveSubscription: { _ in
+                DispatchQueue.main.async {
+                    tracer.send(rootHandler)
+                    self.handlePath(path,
+                                    handler: rootHandler,
+                                    cancelBag: cancelBag,
+                                    tracer: tracer)
+                }
+            })
+            .sink { [unowned self] completion in
+                self.cancelBags.remove(cancelBag)
+            } receiveValue: { handler in
+//                print(handler)
+            }
+            .store(in: cancelBag)
+        return sharedTracer.eraseToAnyPublisher()
     }
 
     private func parsePath(request: DeepLinkRequest) -> [DeepLinkRequest] {
@@ -102,11 +106,10 @@ final class DeepLinkNavigator: DeepLinkHandler {
     }
 
     func handlePath(_ path: [DeepLinkRequest],
-                    handler: DeepLinkHandler?,
+                    handler: DeepLinkHandler,
                     cancelBag: CancelBag,
-                    tracer: PassthroughSubject<DeepLinkHandler?, DeepLinkError>) {
-        guard let handler = handler,
-              let request = path.last else {
+                    tracer: PassthroughSubject<DeepLinkHandler, DeepLinkError>) {
+        guard let request = path.last else {
             tracer.send(completion: .finished)
             return
         }
@@ -148,5 +151,25 @@ final class CancelBag: Hashable {
 extension AnyCancellable {
     func store(in bag: CancelBag) {
         store(in: &bag.cancellables)
+    }
+}
+
+extension AnyPublisher where Output == DeepLinkHandler, Failure == DeepLinkError {
+    static func next(_ handler: DeepLinkHandler) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+        return Just(handler)
+            .setFailureType(to: DeepLinkError.self)
+            .eraseToAnyPublisher()
+    }
+
+    static func future(_ attemptToFulfill: @escaping (@escaping Future<DeepLinkHandler, DeepLinkError>.Promise) -> Void) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+        return Future { attemptToFulfill($0) }.eraseToAnyPublisher()
+    }
+
+    static func notHandled(by handler: DeepLinkHandler) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+        return Fail(error: .notHandled(by: handler)).eraseToAnyPublisher()
+    }
+
+    static func failToHandle(by handler: DeepLinkHandler) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+        return Fail(error: .failToHandle(by: handler)).eraseToAnyPublisher()
     }
 }

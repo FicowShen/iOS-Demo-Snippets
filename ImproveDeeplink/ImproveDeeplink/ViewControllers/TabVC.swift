@@ -19,48 +19,47 @@ final class TabVC: UITabBarController, DeepLinkHandler {
         }
     }
 
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler?, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
         switch request {
         case .tabOneRoot:
-            return Future { [weak self] promise in
+            return .future { [weak self] promise in
                 self?.showTabRoot(tabIndex: 0)
                 guard let nav = self?.selectedViewController as? UINavigationController,
                       let root = nav.topViewController as? TabOneRootVC else {
-                    promise(.failure(.unexpected(message: "fail to load \(TabOneRootVC.self)")))
+                    promise(.failure(.failToHandle(by: self)))
                     return
                 }
                 promise(.success(root))
-            }.eraseToAnyPublisher()
+            }
         case .tabTwoRoot:
-            return Future { [weak self] promise in
+            return .future {  [weak self] promise in
                 self?.asyncLoadPage(promise: promise)
-            }.eraseToAnyPublisher()
+            }
         case .tabThreeRoot:
-            return Future { [weak self] promise in
+            return .future {  [weak self] promise in
                 self?.showTabRoot(tabIndex: 2)
                 guard let nav = self?.selectedViewController as? UINavigationController,
                       let root = nav.topViewController as? TabThreeRootVC else {
-                    promise(.failure(.unexpected(message: "fail to load \(TabThreeRootVC.self)")))
+                    promise(.failure(.failToHandle(by: self)))
                     return
                 }
                 promise(.success(root))
-            }.eraseToAnyPublisher()
-        default: break
+            }
+        default: return .notHandled(by: self)
         }
-        return Future { $0(.failure(.unknownRequest)) }.eraseToAnyPublisher()
     }
 
     private func showTabRoot(tabIndex: Int) {
         selectedIndex = tabIndex
         (self.viewControllers?[tabIndex] as? UINavigationController)?.popToRootViewController(animated: false)
     }
-    private func asyncLoadPage(promise: @escaping (Result<DeepLinkHandler?, DeepLinkError>) -> Void) {
+    private func asyncLoadPage(promise: @escaping (Result<DeepLinkHandler, DeepLinkError>) -> Void) {
         self.showTabRoot(tabIndex: 1)
         // some async code
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             guard let nav = self.selectedViewController as? UINavigationController,
                   let tabTwoRoot = nav.topViewController as? TabTwoRootVC else {
-                promise(.failure(.unexpected(message: "fail to load \(TabTwoRootVC.self)")))
+                promise(.failure(.failToHandle(by: self)))
                 return
             }
             promise(.success(tabTwoRoot))

@@ -38,9 +38,9 @@ class BaseVC: UIViewController {
                     .sink { completion in
                         debugLog("finished deeplink request: \(request)")
                     } receiveValue: { handler in
-                        debugLog(handler)
+                        debugLog("request: \(request), handler: \(handler)")
                     }
-                    .store(in: &self.cancelBag.cancellables)
+                    .store(in: self.cancelBag)
             })
             sheet.addAction(action)
         }
