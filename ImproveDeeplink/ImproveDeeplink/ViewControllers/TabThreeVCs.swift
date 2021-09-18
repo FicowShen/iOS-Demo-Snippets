@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 final class TabThreeRootVC: BaseVC, DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         switch request {
         case .tabThreePathOne(let id):
             return .future { [weak self] promise in
@@ -24,7 +24,7 @@ final class TabThreeRootVC: BaseVC, DeepLinkHandler {
         }
     }
 
-    func asyncLoadPage(id: String, promise: @escaping (Result<DeepLinkHandler, DeepLinkError>) -> Void) {
+    func asyncLoadPage(id: String, promise: @escaping DeepLinkCompletion) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
             let vc = TabThreePathOneVC()
             vc.categoryId = id

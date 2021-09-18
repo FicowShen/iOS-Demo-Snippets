@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 final class TabOneRootVC: BaseVC, DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         let vc: BaseVC & DeepLinkHandler
         switch request {
         case .tabOneTestPageA:
@@ -24,7 +24,7 @@ final class TabOneRootVC: BaseVC, DeepLinkHandler {
 }
 
 final class TabOneTestPageAVC: BaseVC, DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         let vc = TabOneLastPageAVC()
         navigationController?.pushViewController(vc, animated: false)
         return .next(vc)
@@ -32,7 +32,7 @@ final class TabOneTestPageAVC: BaseVC, DeepLinkHandler {
 }
 
 final class TabOneTestPageBVC: BaseVC, DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         let vc = TabOneLastPageBVC()
         navigationController?.pushViewController(vc, animated: false)
         return .next(vc)

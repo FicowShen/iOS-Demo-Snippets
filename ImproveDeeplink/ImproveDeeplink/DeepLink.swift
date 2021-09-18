@@ -8,12 +8,15 @@
 import UIKit
 import Combine
 
+typealias DeepLinkResult = AnyPublisher<DeepLinkHandler, DeepLinkError>
+typealias DeepLinkCompletion = (Result<DeepLinkHandler, DeepLinkError>) -> Void
+
 protocol DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError>
+    func handle(request: DeepLinkRequest) -> DeepLinkResult
 }
 
 extension DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         return .next(self)
     }
 }
@@ -49,7 +52,7 @@ final class DeepLinkNavigator: DeepLinkHandler {
     private var cancelBags = Set<CancelBag>()
 
     @discardableResult
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         guard let rootHandler = rootDeepLinkHandler else {
             return .failToHandle(by: self)
         }
@@ -155,21 +158,21 @@ extension AnyCancellable {
 }
 
 extension AnyPublisher where Output == DeepLinkHandler, Failure == DeepLinkError {
-    static func next(_ handler: DeepLinkHandler) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    static func next(_ handler: DeepLinkHandler) -> DeepLinkResult {
         return Just(handler)
             .setFailureType(to: DeepLinkError.self)
             .eraseToAnyPublisher()
     }
 
-    static func future(_ attemptToFulfill: @escaping (@escaping Future<DeepLinkHandler, DeepLinkError>.Promise) -> Void) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    static func future(_ attemptToFulfill: @escaping (@escaping Future<DeepLinkHandler, DeepLinkError>.Promise) -> Void) -> DeepLinkResult {
         return Future { attemptToFulfill($0) }.eraseToAnyPublisher()
     }
 
-    static func notHandled(by handler: DeepLinkHandler) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    static func notHandled(by handler: DeepLinkHandler) -> DeepLinkResult {
         return Fail(error: .notHandled(by: handler)).eraseToAnyPublisher()
     }
 
-    static func failToHandle(by handler: DeepLinkHandler) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    static func failToHandle(by handler: DeepLinkHandler) -> DeepLinkResult {
         return Fail(error: .failToHandle(by: handler)).eraseToAnyPublisher()
     }
 }

@@ -19,7 +19,7 @@ final class TabVC: UITabBarController, DeepLinkHandler {
         }
     }
 
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         switch request {
         case .tabOneRoot:
             return .future { [weak self] promise in
@@ -53,7 +53,7 @@ final class TabVC: UITabBarController, DeepLinkHandler {
         selectedIndex = tabIndex
         (self.viewControllers?[tabIndex] as? UINavigationController)?.popToRootViewController(animated: false)
     }
-    private func asyncLoadPage(promise: @escaping (Result<DeepLinkHandler, DeepLinkError>) -> Void) {
+    private func asyncLoadPage(promise: @escaping DeepLinkCompletion) {
         self.showTabRoot(tabIndex: 1)
         // some async code
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

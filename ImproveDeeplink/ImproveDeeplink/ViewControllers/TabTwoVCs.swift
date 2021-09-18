@@ -9,7 +9,7 @@ import UIKit
 import Combine
 
 final class TabTwoRootVC: BaseVC, DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         switch request {
         case .tabTwoSecond:
             let vc = TabTwoSecondVC()
@@ -21,7 +21,7 @@ final class TabTwoRootVC: BaseVC, DeepLinkHandler {
 }
 
 final class TabTwoSecondVC: BaseVC, DeepLinkHandler {
-    func handle(request: DeepLinkRequest) -> AnyPublisher<DeepLinkHandler, DeepLinkError> {
+    func handle(request: DeepLinkRequest) -> DeepLinkResult {
         switch request {
         case .tabTwoThird:
             let vc = TabTwoThirdVC()
