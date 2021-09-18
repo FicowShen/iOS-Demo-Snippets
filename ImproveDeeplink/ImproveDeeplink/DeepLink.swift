@@ -11,7 +11,7 @@ import Combine
 typealias DeepLinkResult = AnyPublisher<DeepLinkHandler, DeepLinkError>
 typealias DeepLinkCompletion = (Result<DeepLinkHandler, DeepLinkError>) -> Void
 
-protocol DeepLinkHandler {
+protocol DeepLinkHandler: AnyObject {
     func handle(request: DeepLinkRequest) -> DeepLinkResult
 }
 
@@ -120,10 +120,10 @@ final class DeepLinkNavigator: DeepLinkHandler {
         }
     }
 
-    func handlePath(_ path: [DeepLinkRequest],
-                    handler: DeepLinkHandler,
-                    cancelBag: CancelBag,
-                    tracer: PassthroughSubject<DeepLinkHandler, DeepLinkError>) {
+    private func handlePath(_ path: [DeepLinkRequest],
+                            handler: DeepLinkHandler,
+                            cancelBag: CancelBag,
+                            tracer: PassthroughSubject<DeepLinkHandler, DeepLinkError>) {
         guard let request = path.last else {
             tracer.send(completion: .finished)
             return
