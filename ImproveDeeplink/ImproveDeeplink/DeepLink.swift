@@ -24,6 +24,7 @@ extension DeepLinkHandler {
 enum DeepLinkError: Error {
     case notHandled(by: DeepLinkHandler)
     case failToHandle(by: DeepLinkHandler?)
+    case timeout
 }
 
 enum DeepLinkRequest {
@@ -42,6 +43,8 @@ enum DeepLinkRequest {
     case tabThreeRoot
     case tabThreePathOne(id: String)
     case tabThreePathTwo(name: String)
+    // timeout
+    case testTimeout(seconds: Int)
 }
 
 final class DeepLinkNavigator: DeepLinkHandler {
@@ -49,6 +52,8 @@ final class DeepLinkNavigator: DeepLinkHandler {
     static let shared = DeepLinkNavigator()
 
     var rootDeepLinkHandler: DeepLinkHandler?
+    var scheduler: RunLoop = RunLoop.main
+    var timeout: RunLoop.SchedulerTimeType.Stride = .seconds(3)
     private var cancelBags = Set<CancelBag>()
 
     @discardableResult
@@ -63,7 +68,11 @@ final class DeepLinkNavigator: DeepLinkHandler {
         cancelBags.insert(cancelBag)
 
         let tracer = PassthroughSubject<DeepLinkHandler, DeepLinkError>()
-        let sharedTracer = tracer.share()
+        let sharedTracer = tracer
+            .timeout(timeout, scheduler: scheduler, options: .none) {
+                return .timeout
+            }
+            .share()
         sharedTracer
             .handleEvents(receiveSubscription: { _ in
                 DispatchQueue.main.async {
@@ -105,6 +114,9 @@ final class DeepLinkNavigator: DeepLinkHandler {
             return [.tabThreeRoot]
         case .tabThreePathTwo:
             return [.tabThreeRoot]
+        // timeout
+        case .testTimeout:
+            return []
         }
     }
 

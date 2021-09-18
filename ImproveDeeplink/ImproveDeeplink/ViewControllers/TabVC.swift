@@ -45,6 +45,12 @@ final class TabVC: UITabBarController, DeepLinkHandler {
                 }
                 promise(.success(root))
             }
+        case .testTimeout(let seconds):
+            return .future {  [unowned self] promise in
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(seconds + 1)) {
+                    promise(.success(self))
+                }
+            }
         default: return .notHandled(by: self)
         }
     }

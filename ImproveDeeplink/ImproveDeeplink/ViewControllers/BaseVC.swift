@@ -24,11 +24,13 @@ class BaseVC: UIViewController {
 
     @objc func showActions() {
         let sheet = UIAlertController(title: "DeepLink Actions", message: nil, preferredStyle: .actionSheet)
+        let timeoutSeconds = Int(DeepLinkNavigator.shared.timeout.timeInterval)
         let deeplinkRequests: [DeepLinkRequest] = [
             .tabOneRoot, .tabOneLastPageA, .tabOneLastPageB,
             .tabTwoSecond, .tabTwoThird,
             .tabThreePathTwo(name: "PC"),
             .tabThreePathOne(id: "123"),
+            .testTimeout(seconds: timeoutSeconds)
         ]
         deeplinkRequests.forEach { request in
             let action = UIAlertAction(title: String(describing: request), style: .default, handler: { _ in
@@ -36,7 +38,12 @@ class BaseVC: UIViewController {
                     .shared
                     .handle(request: request)
                     .sink { completion in
-                        debugLog("finished deeplink request: \(request)")
+                        switch completion {
+                        case .failure(let error):
+                            debugLog("request(\(request)) failed: \(error)")
+                        case .finished:
+                            debugLog("request(\(request)) finished")
+                        }
                     } receiveValue: { handler in
                         debugLog("request: \(request), handler: \(handler)")
                     }
