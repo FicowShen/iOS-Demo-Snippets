@@ -91,7 +91,7 @@ class ImproveDeeplinkTests: XCTestCase {
                 handlers.append(handler)
             }
             .store(in: cancelBag)
-        wait(for: [expect], timeout: 1)
+        wait(for: [expect], timeout: 0.1)
     }
 
     func testPerformanceExample() throws {

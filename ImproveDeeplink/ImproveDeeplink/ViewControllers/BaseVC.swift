@@ -7,9 +7,9 @@
 
 import UIKit
 
-class BaseVC: UIViewController {
+let globalCancelBag = CancelBag()
 
-    let cancelBag = CancelBag()
+class BaseVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,10 +44,11 @@ class BaseVC: UIViewController {
                         case .finished:
                             debugLog("request(\(request)) finished")
                         }
+                        globalCancelBag.removeAll()
                     } receiveValue: { handler in
                         debugLog("request: \(request), handler: \(handler)")
                     }
-                    .store(in: self.cancelBag)
+                    .store(in: globalCancelBag)
             })
             sheet.addAction(action)
         }

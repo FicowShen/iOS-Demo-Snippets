@@ -74,14 +74,13 @@ final class DeepLinkNavigator: DeepLinkHandler {
             }
             .share()
         sharedTracer
-            .handleEvents(receiveSubscription: { _ in
-                DispatchQueue.main.async {
-                    tracer.send(rootHandler)
-                    self.handlePath(path,
-                                    handler: rootHandler,
-                                    cancelBag: cancelBag,
-                                    tracer: tracer)
-                }
+            .subscribe(on: scheduler)
+            .handleEvents(receiveRequest: { demand in
+                tracer.send(rootHandler)
+                self.handlePath(path,
+                                handler: rootHandler,
+                                cancelBag: cancelBag,
+                                tracer: tracer)
             })
             .sink { [unowned self] completion in
                 self.cancelBags.remove(cancelBag)
@@ -157,6 +156,10 @@ final class CancelBag: Hashable {
 
     let id = UUID()
     var cancellables = Set<AnyCancellable>()
+
+    func removeAll() {
+        cancellables = []
+    }
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
