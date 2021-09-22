@@ -30,6 +30,7 @@ class BaseVC: UIViewController {
             .tabTwoSecond, .tabTwoThird,
             .tabThreePathTwo(name: "PC"),
             .tabThreePathOne(id: "123"),
+            .show(page: DirectPresentVC(), animated: Bool.random()),
             .testTimeout(seconds: timeoutSeconds)
         ]
         deeplinkRequests.forEach { request in

@@ -43,6 +43,8 @@ enum DeepLinkRequest {
     case tabThreeRoot
     case tabThreePathOne(id: String)
     case tabThreePathTwo(name: String)
+    // direct present
+    case show(page: UIViewController, animated: Bool)
     // timeout
     case testTimeout(seconds: Int)
 }
@@ -113,6 +115,9 @@ final class DeepLinkNavigator: DeepLinkHandler {
             return [.tabThreeRoot]
         case .tabThreePathTwo:
             return [.tabThreeRoot]
+        // direct present
+        case .show:
+            return []
         // timeout
         case .testTimeout:
             return []

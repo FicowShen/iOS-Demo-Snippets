@@ -45,6 +45,9 @@ final class TabVC: UITabBarController, DeepLinkHandler {
                 }
                 promise(.success(root))
             }
+        case let .show(page, animated):
+            present(page, animated: animated, completion: nil)
+            return .next(self)
         case .testTimeout(let seconds):
             return .future {  [unowned self] promise in
                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(seconds + 1)) {
