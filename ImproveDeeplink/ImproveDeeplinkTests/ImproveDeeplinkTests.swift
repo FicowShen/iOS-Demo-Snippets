@@ -22,6 +22,7 @@ class ImproveDeeplinkTests: XCTestCase {
     }
 
     func testTimeout() throws {
+        let expect = expectation(description: #function)
         navigator.timeout = .seconds(1)
         navigator
             .handle(request: .testTimeout(seconds: 1))
@@ -32,12 +33,14 @@ class ImproveDeeplinkTests: XCTestCase {
                         XCTFail("should get timeout error")
                         return
                     }
+                    expect.fulfill()
                 case .finished: XCTFail("should fail due to timeout")
                 }
             } receiveValue: { handler in
                 XCTAssertTrue(handler === self.rootHandler)
             }
             .store(in: cancelBag)
+        wait(for: [expect], timeout: 1)
     }
 
     func testSyncNavigation() throws {
@@ -47,6 +50,7 @@ class ImproveDeeplinkTests: XCTestCase {
             MockTabTwoRootDeepLinkHandler.self,
             MockTabTwoSecondDeepLinkHandler.self
         ]
+        let expect = expectation(description: #function)
         navigator
             .handle(request: .tabTwoSecond)
             .sink { completion in
@@ -59,10 +63,12 @@ class ImproveDeeplinkTests: XCTestCase {
                         XCTAssertTrue(type(of: handlers[i]) == handlerTypes[i])
                     }
                 }
+                expect.fulfill()
             } receiveValue: { handler in
                 handlers.append(handler)
             }
             .store(in: cancelBag)
+        wait(for: [expect], timeout: 1)
     }
 
     func testAsyncNavigation() throws {
@@ -91,7 +97,7 @@ class ImproveDeeplinkTests: XCTestCase {
                 handlers.append(handler)
             }
             .store(in: cancelBag)
-        wait(for: [expect], timeout: 0.1)
+        wait(for: [expect], timeout: 1)
     }
 
     func testPerformanceExample() throws {

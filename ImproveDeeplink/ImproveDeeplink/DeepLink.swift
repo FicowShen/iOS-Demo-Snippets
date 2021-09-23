@@ -63,8 +63,6 @@ final class DeepLinkNavigator: DeepLinkHandler {
         guard let rootHandler = rootDeepLinkHandler else {
             return .failToHandle(by: self)
         }
-        let rawPath = parsePath(request: request) + [request]
-        let path = Array(rawPath.reversed())
 
         let cancelBag = CancelBag()
         cancelBags.insert(cancelBag)
@@ -75,14 +73,19 @@ final class DeepLinkNavigator: DeepLinkHandler {
                 return .timeout
             }
             .share()
+        func handlePath() {
+            let rawPath = parsePath(request: request) + [request]
+            let path = Array(rawPath.reversed())
+            tracer.send(rootHandler)
+            self.handlePath(path,
+                            handler: rootHandler,
+                            cancelBag: cancelBag,
+                            tracer: tracer)
+        }
         sharedTracer
             .subscribe(on: scheduler)
-            .handleEvents(receiveRequest: { demand in
-                tracer.send(rootHandler)
-                self.handlePath(path,
-                                handler: rootHandler,
-                                cancelBag: cancelBag,
-                                tracer: tracer)
+            .handleEvents(receiveSubscription: { _ in
+                DispatchQueue.main.async { handlePath() }
             })
             .sink { [unowned self] completion in
                 self.cancelBags.remove(cancelBag)
