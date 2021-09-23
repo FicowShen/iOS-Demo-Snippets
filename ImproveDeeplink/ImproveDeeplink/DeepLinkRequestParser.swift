@@ -58,7 +58,7 @@ struct TabOneDeepLinkRequestParser: DeepLinkRequestParser {
             return [.tabOneRoot]
         case .tabOneLastPageA:
             return [.tabOneRoot, .tabOneTestPageA]
-        case .tabOneLastPageB:
+        case .tabOneLastPageB: // mock error, should fail
             return [.tabOneRoot, .tabOneTestPageB]
         default:
             return nil

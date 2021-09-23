@@ -33,9 +33,15 @@ final class TabOneTestPageAVC: BaseVC, DeepLinkHandler {
 
 final class TabOneTestPageBVC: BaseVC, DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> DeepLinkResult {
-        let vc = TabOneLastPageBVC()
-        navigationController?.pushViewController(vc, animated: false)
-        return .next(vc)
+        switch request {
+        case .tabOneLastPageB:
+            // mock an error
+            // should navigate to TabOneLastPageBVC
+            //        let vc = TabOneLastPageBVC()
+            //        navigationController?.pushViewController(vc, animated: false)
+            return .notHandled(by: self)
+        default: return .notHandled(by: self)
+        }
     }
 }
 

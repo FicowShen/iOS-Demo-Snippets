@@ -28,28 +28,6 @@ enum DeepLinkError: Error {
     case timeout
 }
 
-enum DeepLinkRequest {
-    // tab 1
-    case tabOneRoot
-    // A/B Test pages
-    case tabOneTestPageA
-    case tabOneTestPageB
-    case tabOneLastPageA
-    case tabOneLastPageB
-    // tab 2
-    case tabTwoRoot
-    case tabTwoSecond
-    case tabTwoThird
-    // tab 3
-    case tabThreeRoot
-    case tabThreePathOne(id: String)
-    case tabThreePathTwo(name: String)
-    // direct present
-    case show(page: UIViewController, animated: Bool)
-    // timeout
-    case testTimeout(seconds: Int)
-}
-
 final class DeepLinkNavigator: DeepLinkHandler {
 
     static let shared = DeepLinkNavigator()
@@ -58,6 +36,7 @@ final class DeepLinkNavigator: DeepLinkHandler {
     var scheduler: RunLoop = RunLoop.main
     var timeout: RunLoop.SchedulerTimeType.Stride = .seconds(3)
     var requestParser: DeepLinkRequestParser = DefaultDeepLinkRequestParser()
+    var errorTracker: ErrorTracker = Analytics.shared
     private var cancelBags = Set<CancelBag>()
 
     @discardableResult
@@ -93,6 +72,12 @@ final class DeepLinkNavigator: DeepLinkHandler {
             })
             .sink { [unowned self] completion in
                 self.cancelBags.remove(cancelBag)
+                switch completion {
+                case .finished: break
+                case .failure(let error):
+                    self.errorTracker.logDeepLinkFailure(request: request,
+                                                         error: error)
+                }
             } receiveValue: { handler in
 //                print(handler)
             }
