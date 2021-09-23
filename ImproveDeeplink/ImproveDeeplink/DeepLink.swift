@@ -22,6 +22,7 @@ extension DeepLinkHandler {
 }
 
 enum DeepLinkError: Error {
+    case invalidRequest
     case notHandled(by: DeepLinkHandler)
     case failToHandle(by: DeepLinkHandler?)
     case timeout
@@ -56,6 +57,7 @@ final class DeepLinkNavigator: DeepLinkHandler {
     var rootDeepLinkHandler: DeepLinkHandler?
     var scheduler: RunLoop = RunLoop.main
     var timeout: RunLoop.SchedulerTimeType.Stride = .seconds(3)
+    var requestParser: DeepLinkRequestParser = DefaultDeepLinkRequestParser()
     private var cancelBags = Set<CancelBag>()
 
     @discardableResult
@@ -73,9 +75,11 @@ final class DeepLinkNavigator: DeepLinkHandler {
                 return .timeout
             }
             .share()
-        func handlePath() {
-            let rawPath = parsePath(request: request) + [request]
-            let path = Array(rawPath.reversed())
+        func handleRequest() {
+            guard let path = requestParser.parsePath(request: request) else {
+                tracer.send(completion: .failure(.invalidRequest))
+                return
+            }
             tracer.send(rootHandler)
             self.handlePath(path,
                             handler: rootHandler,
@@ -85,7 +89,7 @@ final class DeepLinkNavigator: DeepLinkHandler {
         sharedTracer
             .subscribe(on: scheduler)
             .handleEvents(receiveSubscription: { _ in
-                DispatchQueue.main.async { handlePath() }
+                DispatchQueue.main.async { handleRequest() }
             })
             .sink { [unowned self] completion in
                 self.cancelBags.remove(cancelBag)
@@ -94,37 +98,6 @@ final class DeepLinkNavigator: DeepLinkHandler {
             }
             .store(in: cancelBag)
         return sharedTracer.eraseToAnyPublisher()
-    }
-
-    private func parsePath(request: DeepLinkRequest) -> [DeepLinkRequest] {
-        switch request {
-        // tab root
-        case .tabOneRoot, .tabTwoRoot, .tabThreeRoot:
-            return []
-        // tab 1
-        case .tabOneTestPageA, .tabOneTestPageB:
-            return [.tabOneRoot]
-        case .tabOneLastPageA:
-            return [.tabOneRoot, .tabOneTestPageA]
-        case .tabOneLastPageB:
-            return [.tabOneRoot, .tabOneTestPageB]
-        // tab 2
-        case .tabTwoSecond:
-            return [.tabTwoRoot]
-        case .tabTwoThird:
-            return [.tabTwoRoot, .tabTwoSecond]
-        // tab 3
-        case .tabThreePathOne:
-            return [.tabThreeRoot]
-        case .tabThreePathTwo:
-            return [.tabThreeRoot]
-        // direct present
-        case .show:
-            return []
-        // timeout
-        case .testTimeout:
-            return []
-        }
     }
 
     private func handlePath(_ path: [DeepLinkRequest],

@@ -23,7 +23,7 @@ class ImproveDeeplinkTests: XCTestCase {
 
     func testTimeout() throws {
         let expect = expectation(description: #function)
-        navigator.timeout = .seconds(1)
+        navigator.timeout = .milliseconds(50)
         navigator
             .handle(request: .testTimeout(seconds: 1))
             .sink { completion in
