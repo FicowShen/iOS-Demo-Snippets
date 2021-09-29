@@ -71,13 +71,13 @@ final class DeepLinkNavigator: DeepLinkHandler {
                 DispatchQueue.main.async { handleRequest() }
             })
             .sink { [unowned self] completion in
-                self.cancelBags.remove(cancelBag)
                 switch completion {
                 case .finished: break
                 case .failure(let error):
                     self.errorTracker.logDeepLinkFailure(request: request,
                                                          error: error)
                 }
+                DispatchQueue.main.async { self.cancelBags.remove(cancelBag) }
             } receiveValue: { handler in
 //                print(handler)
             }
