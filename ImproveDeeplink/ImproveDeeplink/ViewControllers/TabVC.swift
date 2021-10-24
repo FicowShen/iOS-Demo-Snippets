@@ -21,7 +21,9 @@ final class TabVC: UITabBarController, DeepLinkHandler {
 
     func handle(request: DeepLinkRequest) -> DeepLinkResult {
         switch request {
-        case .tabOneRoot:
+        case .tabOneRoot,
+             .tabOneTestPageA, .tabOneTestPageB,
+             .tabOneLastPageA, .tabOneLastPageB:
             return .future { [weak self] promise in
                 self?.showTabRoot(tabIndex: 0)
                 guard let nav = self?.selectedViewController as? UINavigationController,
@@ -31,11 +33,11 @@ final class TabVC: UITabBarController, DeepLinkHandler {
                 }
                 promise(.success(root))
             }
-        case .tabTwoRoot:
+        case .tabTwoRoot, .tabTwoSecond, .tabTwoThird:
             return .future {  [weak self] promise in
                 self?.asyncLoadPage(promise: promise)
             }
-        case .tabThreeRoot:
+        case .tabThreeRoot, .tabThreePathOne, .tabThreePathTwo:
             return .future {  [weak self] promise in
                 self?.showTabRoot(tabIndex: 2)
                 guard let nav = self?.selectedViewController as? UINavigationController,
@@ -54,7 +56,6 @@ final class TabVC: UITabBarController, DeepLinkHandler {
                     promise(.success(self))
                 }
             }
-        default: return .notHandled(by: self)
         }
     }
 

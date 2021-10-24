@@ -11,7 +11,7 @@ import Combine
 final class TabTwoRootVC: BaseVC, DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> DeepLinkResult {
         switch request {
-        case .tabTwoSecond:
+        case .tabTwoSecond, .tabTwoThird:
             let vc = TabTwoSecondVC()
             navigationController?.pushViewController(vc, animated: false)
             return .next(vc)

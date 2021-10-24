@@ -12,9 +12,9 @@ final class TabOneRootVC: BaseVC, DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> DeepLinkResult {
         let vc: BaseVC & DeepLinkHandler
         switch request {
-        case .tabOneTestPageA:
+        case .tabOneTestPageA, .tabOneLastPageA:
             vc = TabOneTestPageAVC()
-        case .tabOneTestPageB:
+        case .tabOneTestPageB, .tabOneLastPageB:
             vc = TabOneTestPageBVC()
         default: return .notHandled(by: self)
         }

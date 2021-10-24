@@ -8,8 +8,8 @@
 import UIKit
 import Combine
 
-typealias DeepLinkResult = AnyPublisher<DeepLinkHandler, DeepLinkError>
-typealias DeepLinkCompletion = (Result<DeepLinkHandler, DeepLinkError>) -> Void
+typealias DeepLinkResult = AnyPublisher<DeepLinkHandler?, DeepLinkError>
+typealias DeepLinkCompletion = (Result<DeepLinkHandler?, DeepLinkError>) -> Void
 
 protocol DeepLinkHandler: AnyObject {
     func handle(request: DeepLinkRequest) -> DeepLinkResult
@@ -17,13 +17,13 @@ protocol DeepLinkHandler: AnyObject {
 
 extension DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> DeepLinkResult {
-        return .next(self)
+        return .next(nil)
     }
 }
 
 enum DeepLinkError: Error {
     case invalidRequest
-    case notHandled(by: DeepLinkHandler)
+    case notHandled(by: DeepLinkHandler?)
     case failToHandle(by: DeepLinkHandler?)
     case timeout
 }
@@ -35,7 +35,6 @@ final class DeepLinkNavigator: DeepLinkHandler {
     var rootDeepLinkHandler: DeepLinkHandler?
     var scheduler: RunLoop = RunLoop.main
     var timeout: RunLoop.SchedulerTimeType.Stride = .seconds(3)
-    var requestParser: DeepLinkRequestParser = DefaultDeepLinkRequestParser()
     var errorTracker: ErrorTracker = Analytics.shared
     private var cancelBags = Set<CancelBag>()
 
@@ -48,22 +47,18 @@ final class DeepLinkNavigator: DeepLinkHandler {
         let cancelBag = CancelBag()
         cancelBags.insert(cancelBag)
 
-        let tracer = PassthroughSubject<DeepLinkHandler, DeepLinkError>()
+        let tracer = PassthroughSubject<DeepLinkHandler?, DeepLinkError>()
         let sharedTracer = tracer
             .timeout(timeout, scheduler: scheduler, options: .none) {
                 return .timeout
             }
             .share()
         func handleRequest() {
-            guard let path = requestParser.parsePath(request: request) else {
-                tracer.send(completion: .failure(.invalidRequest))
-                return
-            }
             tracer.send(rootHandler)
-            self.handlePath(path,
-                            handler: rootHandler,
-                            cancelBag: cancelBag,
-                            tracer: tracer)
+            self.handle(request: request,
+                        handler: rootHandler,
+                        cancelBag: cancelBag,
+                        tracer: tracer)
         }
         sharedTracer
             .subscribe(on: scheduler)
@@ -85,14 +80,10 @@ final class DeepLinkNavigator: DeepLinkHandler {
         return sharedTracer.eraseToAnyPublisher()
     }
 
-    private func handlePath(_ path: [DeepLinkRequest],
-                            handler: DeepLinkHandler,
-                            cancelBag: CancelBag,
-                            tracer: PassthroughSubject<DeepLinkHandler, DeepLinkError>) {
-        guard let request = path.last else {
-            tracer.send(completion: .finished)
-            return
-        }
+    private func handle(request: DeepLinkRequest,
+                        handler: DeepLinkHandler,
+                        cancelBag: CancelBag,
+                        tracer: PassthroughSubject<DeepLinkHandler?, DeepLinkError>) {
         handler
             .handle(request: request)
             .sink { completion in
@@ -105,10 +96,11 @@ final class DeepLinkNavigator: DeepLinkHandler {
                 }
             } receiveValue: { [unowned self] nextHandler in
                 tracer.send(nextHandler)
-                self.handlePath(path.dropLast(),
-                                handler: nextHandler,
-                                cancelBag: cancelBag,
-                                tracer: tracer)
+                guard let handler = nextHandler else { return }
+                self.handle(request: request,
+                            handler: handler,
+                            cancelBag: cancelBag,
+                            tracer: tracer)
             }
             .store(in: cancelBag)
     }
@@ -138,22 +130,22 @@ extension AnyCancellable {
     }
 }
 
-extension AnyPublisher where Output == DeepLinkHandler, Failure == DeepLinkError {
-    static func next(_ handler: DeepLinkHandler) -> DeepLinkResult {
+extension AnyPublisher where Output == DeepLinkHandler?, Failure == DeepLinkError {
+    static func next(_ handler: DeepLinkHandler?) -> DeepLinkResult {
         return Just(handler)
             .setFailureType(to: DeepLinkError.self)
             .eraseToAnyPublisher()
     }
 
-    static func future(_ attemptToFulfill: @escaping (@escaping Future<DeepLinkHandler, DeepLinkError>.Promise) -> Void) -> DeepLinkResult {
+    static func future(_ attemptToFulfill: @escaping (@escaping Future<DeepLinkHandler?, DeepLinkError>.Promise) -> Void) -> DeepLinkResult {
         return Future { attemptToFulfill($0) }.eraseToAnyPublisher()
     }
 
-    static func notHandled(by handler: DeepLinkHandler) -> DeepLinkResult {
+    static func notHandled(by handler: DeepLinkHandler?) -> DeepLinkResult {
         return Fail(error: .notHandled(by: handler)).eraseToAnyPublisher()
     }
 
-    static func failToHandle(by handler: DeepLinkHandler) -> DeepLinkResult {
+    static func failToHandle(by handler: DeepLinkHandler?) -> DeepLinkResult {
         return Fail(error: .failToHandle(by: handler)).eraseToAnyPublisher()
     }
 }
