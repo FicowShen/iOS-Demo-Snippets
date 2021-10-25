@@ -17,7 +17,7 @@ protocol DeepLinkHandler: AnyObject {
 
 extension DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> DeepLinkResult {
-        return .next(nil)
+        return .nextHandler(nil)
     }
 }
 
@@ -95,8 +95,11 @@ final class DeepLinkNavigator: DeepLinkHandler {
                     break
                 }
             } receiveValue: { [unowned self] nextHandler in
-                tracer.send(nextHandler)
-                guard let handler = nextHandler else { return }
+                guard let handler = nextHandler else {
+                    tracer.send(completion: .finished)
+                    return
+                }
+                tracer.send(handler)
                 self.handle(request: request,
                             handler: handler,
                             cancelBag: cancelBag,
@@ -131,7 +134,7 @@ extension AnyCancellable {
 }
 
 extension AnyPublisher where Output == DeepLinkHandler?, Failure == DeepLinkError {
-    static func next(_ handler: DeepLinkHandler?) -> DeepLinkResult {
+    static func nextHandler(_ handler: DeepLinkHandler?) -> DeepLinkResult {
         return Just(handler)
             .setFailureType(to: DeepLinkError.self)
             .eraseToAnyPublisher()

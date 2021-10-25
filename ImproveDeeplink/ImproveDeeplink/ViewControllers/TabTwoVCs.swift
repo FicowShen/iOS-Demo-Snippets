@@ -14,7 +14,7 @@ final class TabTwoRootVC: BaseVC, DeepLinkHandler {
         case .tabTwoSecond, .tabTwoThird:
             let vc = TabTwoSecondVC()
             navigationController?.pushViewController(vc, animated: false)
-            return .next(vc)
+            return .nextHandler(vc)
         default: return .notHandled(by: self)
         }
     }
@@ -26,7 +26,7 @@ final class TabTwoSecondVC: BaseVC, DeepLinkHandler {
         case .tabTwoThird:
             let vc = TabTwoThirdVC()
             navigationController?.pushViewController(vc, animated: false)
-            return .next(vc)
+            return .nextHandler(vc)
         default: return .notHandled(by: self)
         }
     }

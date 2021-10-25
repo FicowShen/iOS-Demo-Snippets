@@ -19,7 +19,7 @@ final class TabThreeRootVC: BaseVC, DeepLinkHandler {
             let vc = TabThreePathTwoVC()
             vc.productName = name
             navigationController?.pushViewController(vc, animated: true)
-            return .next(vc)
+            return .nextHandler(vc)
         default: return .notHandled(by: self)
         }
     }

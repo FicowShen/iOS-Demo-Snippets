@@ -19,7 +19,7 @@ final class TabOneRootVC: BaseVC, DeepLinkHandler {
         default: return .notHandled(by: self)
         }
         navigationController?.pushViewController(vc, animated: false)
-        return .next(vc)
+        return .nextHandler(vc)
     }
 }
 
@@ -27,7 +27,7 @@ final class TabOneTestPageAVC: BaseVC, DeepLinkHandler {
     func handle(request: DeepLinkRequest) -> DeepLinkResult {
         let vc = TabOneLastPageAVC()
         navigationController?.pushViewController(vc, animated: false)
-        return .next(vc)
+        return .nextHandler(vc)
     }
 }
 
