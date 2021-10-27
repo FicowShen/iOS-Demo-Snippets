@@ -1,14 +1,14 @@
 //
-//  VIPER_DemoTests.swift
-//  VIPER-DemoTests
+//  MVX_and_VIPER_patternsTests.swift
+//  MVX and VIPER patternsTests
 //
-//  Created by Ficow on 2021/10/6.
+//  Created by FicowShen on 2021/10/27.
 //
 
 import XCTest
-@testable import VIPER_Demo
+@testable import MVX_and_VIPER_patterns
 
-class VIPER_DemoTests: XCTestCase {
+class MVX_and_VIPER_patternsTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.

@@ -1,8 +1,8 @@
 //
 //  ViewController.swift
-//  VIPER-Demo
+//  MVX and VIPER patterns
 //
-//  Created by Ficow on 2021/10/6.
+//  Created by FicowShen on 2021/10/27.
 //
 
 import UIKit
