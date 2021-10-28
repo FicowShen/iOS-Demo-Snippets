@@ -41,3 +41,38 @@ class MVCViewController: UIViewController {
     }
 
 }
+
+
+class TestableMVCViewController: UIViewController {
+    var taskMaker: DataTaskMaker = URLSession(configuration: .default)
+    var userProfile: TestableMVCUserProfile?
+    private let nameLabel = UILabel()
+    private let indicator = UIActivityIndicatorView()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        // Do any additional setup after loading the view.
+        // ...
+    }
+
+    func saveNewName(_ name: String) {
+        indicator.startAnimating()
+        userProfile?.updateName(name, taskMaker: taskMaker) { [weak self] error in
+            defer { self?.indicator.stopAnimating() }
+            if let error = error {
+                self?.showError(error)
+                return
+            }
+            self?.showSuccess()
+        }
+    }
+
+    func showSuccess() {
+        // ...
+    }
+
+    func showError(_ error: Error) {
+        // ...
+    }
+}
