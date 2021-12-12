@@ -39,11 +39,21 @@ extension CalculatorButtonItem {
         }
     }
 
+//    var size: CGSize {
+//        if case .digit(let value) = self, value == 0 {
+//            return CGSize(width: 88 * 2 + 8, height: 88)
+//        }
+//        return CGSize(width: 88, height: 88)
+//    }
+
+    // scale the pad with frame values
     var size: CGSize {
+        let spacing: CGFloat = 8
+        let width = (UIScreen.main.bounds.width - 3 * spacing) / 4
         if case .digit(let value) = self, value == 0 {
-            return CGSize(width: 88 * 2 + 8, height: 88)
+            return CGSize(width: width * 2 + spacing, height: width)
         }
-        return CGSize(width: 88, height: 88)
+        return CGSize(width: width, height: width)
     }
 
     var backgroundColorName: String {

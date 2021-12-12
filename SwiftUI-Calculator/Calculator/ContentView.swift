@@ -9,9 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
 
-    let row: [CalculatorButtonItem] = [
-        .digit(1), .digit(2), .digit(3), .op(.plus),
-    ]
+    let scale: CGFloat = UIScreen.main.bounds.width / 375
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 12) {
@@ -55,6 +53,8 @@ struct ContentView: View {
             CalculatorButtonPad()
                 .padding(.bottom)
         }
+        // scaleEffect may not work
+//        .scaleEffect(scale)
     }
 }
 
@@ -113,8 +113,12 @@ struct CalculatorButton : View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView().environment(\.colorScheme, .dark)
-        ContentView().previewDevice("iPhone 8")
+        ContentView()
+        ContentView()
+            .previewDevice("iPhone 8")
+            .preferredColorScheme(.dark)
+        ContentView()
+            .previewDevice("com.apple.CoreSimulator.SimDeviceType.iPad-Air--4th-generation-")
         //        ZStack {
         //            Circle()
         //            Text("?")
