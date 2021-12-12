@@ -112,11 +112,13 @@ struct CalculatorButton : View {
 
 
 struct ContentView_Previews: PreviewProvider {
+
     static var previews: some View {
         ContentView()
         ContentView()
             .previewDevice("iPhone 8")
             .preferredColorScheme(.dark)
+        /// get simulator list by CLI command: `xcrun simctl list devicetypes`
         ContentView()
             .previewDevice("com.apple.CoreSimulator.SimDeviceType.iPad-Air--4th-generation-")
         //        ZStack {
