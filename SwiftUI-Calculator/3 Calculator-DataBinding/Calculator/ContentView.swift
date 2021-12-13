@@ -20,16 +20,32 @@ struct ContentView : View {
     @EnvironmentObject var model: CalculatorModel
 
     @State private var editingHistory = false
+    @State private var showingResult = false
 
     var body: some View {
         VStack(spacing: 12) {
             Spacer()
             Button("操作履历: \(model.history.count)") {
                 self.editingHistory = true
-            }.sheet(isPresented: self.$editingHistory) {
-                HistoryView(model: self.model)
             }
+            .sheet(isPresented: self.$editingHistory) {
+                HistoryView(model: self.model)
+//                HistoryView(model: self.model,
+//                            isPresented: self.$editingHistory)
+            }
+            // show an alert when tapping the result
             Text(model.brain.output)
+                .onTapGesture {
+                    self.showingResult = true
+                }
+                .alert(isPresented: self.$showingResult, content: {
+                    .init(title: Text(model.historyDetail),
+                          message: Text(model.brain.output),
+                          primaryButton: .cancel(Text("取消")),
+                          secondaryButton: .default(Text("复制"), action: {
+                            UIPasteboard.general.string = model.brain.output
+                          }))
+                })
                 .font(.system(size: 76))
                 .minimumScaleFactor(0.5)
                 .padding(.trailing, 24 * scale)
