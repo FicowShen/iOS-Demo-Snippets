@@ -12,6 +12,8 @@ struct HistoryView: View {
     
     @ObservedObject var model: CalculatorModel
 
+    var showCloseButton: Bool
+
 //    @Binding var isPresented: Bool
     // show & hide a sheet: https://www.swiftbysundell.com/articles/dismissing-swiftui-modal-and-detail-views/
     @Environment(\.presentationMode) var presentationMode
@@ -40,13 +42,15 @@ struct HistoryView: View {
                 }
             }.padding()
             Spacer()
-            Button("关闭") {
-                presentationMode.wrappedValue.dismiss()
-                // iOS 15, call as function feature: https://www.swiftbysundell.com/articles/exploring-swift-5-2s-new-functional-features/#calling-types-as-functions
-                // dismiss()
-//                isPresented = false
+            if showCloseButton {
+                Button("关闭") {
+                    presentationMode.wrappedValue.dismiss()
+                    // iOS 15, call as function feature: https://www.swiftbysundell.com/articles/exploring-swift-5-2s-new-functional-features/#calling-types-as-functions
+                    // dismiss()
+    //                isPresented = false
+                }
+                .padding(.bottom, 20)
             }
-            .padding(.bottom, 20)
         }
     }
 }

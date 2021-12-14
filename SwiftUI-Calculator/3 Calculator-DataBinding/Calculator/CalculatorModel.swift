@@ -10,8 +10,6 @@ import Combine
 
 class CalculatorModel: ObservableObject {
 
-    @Published var brain: CalculatorBrain = .left("0")
-
     // Replace template code with @Published
 //    let objectWillChange = PassthroughSubject<Void, Never>()
 //
@@ -21,7 +19,14 @@ class CalculatorModel: ObservableObject {
 //        }
 //    }
 
-    @Published var history: [CalculatorButtonItem] = []
+//    @Published var brain: CalculatorBrain = .left("0")
+//    @Published var history: [CalculatorButtonItem] = []
+
+    private(set) var brain: CalculatorBrain = .left("0")
+    private(set) var history: [CalculatorButtonItem] = []
+
+    // replace @Published with manual emitting events for better performance
+    let objectWillChange = PassthroughSubject<Void, Never>()
 
     var historyDetail: String {
         history.map { $0.description }.joined()
@@ -39,7 +44,7 @@ class CalculatorModel: ObservableObject {
         }
     }
 
-    func keepHistory(upTo index: Int) {
+    private func keepHistory(upTo index: Int) {
         precondition(index <= totalCount, "Out of index.")
         let total = history + temporaryKept
         history = Array(total[..<index])
@@ -48,6 +53,7 @@ class CalculatorModel: ObservableObject {
             result, item in
             result.apply(item: item)
         }
+        objectWillChange.send()
     }
 
 
@@ -56,5 +62,6 @@ class CalculatorModel: ObservableObject {
         history.append(item)
         temporaryKept.removeAll()
         slidingIndex = Float(totalCount)
+        objectWillChange.send()
     }
 }

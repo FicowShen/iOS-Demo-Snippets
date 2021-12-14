@@ -25,11 +25,12 @@ struct ContentView : View {
     var body: some View {
         VStack(spacing: 12) {
             Spacer()
+            HistoryView(model: self.model, showCloseButton: false)
             Button("操作履历: \(model.history.count)") {
                 self.editingHistory = true
             }
             .sheet(isPresented: self.$editingHistory) {
-                HistoryView(model: self.model)
+                HistoryView(model: self.model, showCloseButton: true)
 //                HistoryView(model: self.model,
 //                            isPresented: self.$editingHistory)
             }
