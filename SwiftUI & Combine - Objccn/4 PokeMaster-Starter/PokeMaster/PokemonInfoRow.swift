@@ -13,7 +13,7 @@ struct PokemonInfoRow: View {
 
     let model: PokemonViewModel
 
-    @State var expanded: Bool
+    let expanded: Bool
 
     var body: some View {
         VStack {
@@ -86,17 +86,19 @@ struct PokemonInfoRow: View {
 //                .delay(0.2)
 //                .repeatForever(autoreverses: true)
 //        )
-        .onTapGesture {
-            withAnimation(
-                .spring(
-                    response: 0.55,
-                    dampingFraction: 0.425,
-                    blendDuration: 0
-                )
-            ) {
-                self.expanded.toggle()
-            }
-        }
+
+        // manage the expanding status outside of this view
+//        .onTapGesture {
+//            withAnimation(
+//                .spring(
+//                    response: 0.55,
+//                    dampingFraction: 0.425,
+//                    blendDuration: 0
+//                )
+//            ) {
+//                self.expanded.toggle()
+//            }
+//        }
     }
 }
 
