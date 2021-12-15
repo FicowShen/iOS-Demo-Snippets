@@ -79,8 +79,23 @@ struct PokemonInfoRow: View {
             }
         )
         .padding(.horizontal)
+//        .animation(.default) // implicit anim
+//        .animation(
+//            Animation
+//                .linear(duration: 0.5)
+//                .delay(0.2)
+//                .repeatForever(autoreverses: true)
+//        )
         .onTapGesture {
-            self.expanded.toggle()
+            withAnimation(
+                .spring(
+                    response: 0.55,
+                    dampingFraction: 0.425,
+                    blendDuration: 0
+                )
+            ) {
+                self.expanded.toggle()
+            }
         }
     }
 }
