@@ -21,11 +21,35 @@ struct PokemonInfoPanel: View {
             .opacity(0.2)
     }
 
+    var pokemonDescription: some View {
+        Text(model.descriptionText)
+            .font(.callout)
+            .foregroundColor(Color(hex: 0x666666))
+            .fixedSize(horizontal: false, vertical: true) // keeps showing multiline text
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             topIndicator
             Header(model: model)
+            pokemonDescription
+            Divider()
+            AbilityList(
+                model: model,
+                abilityModels: abilities
+            )
         }
+        .padding(
+            EdgeInsets(
+                top: 12,
+                leading: 30,
+                bottom: 30,
+                trailing: 30
+            )
+        )
+        .background(Color.white)
+        .cornerRadius(20)
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 
