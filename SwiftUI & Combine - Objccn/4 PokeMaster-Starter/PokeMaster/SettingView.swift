@@ -51,8 +51,8 @@ struct SettingView: View {
     var body: some View {
         Form {
             accountSection
-            // optionSection
-            // actionSection
+            optionSection
+            actionSection
         }
     }
 
@@ -77,6 +77,44 @@ struct SettingView: View {
             Button(settings.accountBehavior.text) {
                 print("登录/注册")
             }
+        }
+    }
+
+    var optionSection: some View {
+        Section(header: Text("选项")) {
+            HStack {
+                Text("显示英文名")
+                Spacer()
+                Toggle("", isOn: $settings.showEnglishName)
+            }
+            HStack {
+                Text("排序方式")
+                Spacer()
+                Button(action: {
+
+                }){
+                    HStack {
+                        Text(settings.sorting.text)
+                        Image(systemName: "chevron.right")
+                            .font(.body)
+                    }
+                    .foregroundColor(.gray)
+                }
+            }
+            HStack {
+                Text("只显示收藏")
+                Spacer()
+                Toggle("", isOn: $settings.showFavoriteOnly)
+            }
+        }
+    }
+
+    var actionSection: some View {
+        Section {
+            Button("清空缓存") {
+
+            }
+            .foregroundColor(.red)
         }
     }
 }
