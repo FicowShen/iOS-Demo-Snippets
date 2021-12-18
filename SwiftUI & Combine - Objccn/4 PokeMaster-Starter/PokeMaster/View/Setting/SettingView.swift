@@ -82,29 +82,26 @@ struct SettingView: View {
 
     var optionSection: some View {
         Section(header: Text("选项")) {
-            HStack {
+            Toggle(isOn: $settings.showEnglishName) {
+                // simply wrap the content with a closure
                 Text("显示英文名")
-                Spacer()
-                Toggle("", isOn: $settings.showEnglishName)
             }
-            HStack {
-                Text("排序方式")
-                Spacer()
-                Button(action: {
-
-                }){
-                    HStack {
-                        Text(settings.sorting.text)
-                        Image(systemName: "chevron.right")
-                            .font(.body)
-                    }
-                    .foregroundColor(.gray)
+//            NavigationLink(
+//                destination: Text("Destination"),
+//                label: {
+//                    HStack {
+//                        Text("排序方式")
+//                        Spacer()
+//                        Text(settings.sorting.text)
+//                    }
+//                })
+            Picker(selection: $settings.sorting, label: Text("排序方式"), content: {
+                ForEach(Settings.Sorting.allCases, id: \.self) {
+                    Text($0.text)
                 }
-            }
-            HStack {
+            })
+            Toggle(isOn: $settings.showFavoriteOnly) {
                 Text("只显示收藏")
-                Spacer()
-                Toggle("", isOn: $settings.showFavoriteOnly)
             }
         }
     }
@@ -112,7 +109,7 @@ struct SettingView: View {
     var actionSection: some View {
         Section {
             Button("清空缓存") {
-
+                print("清空缓存")
             }
             .foregroundColor(.red)
         }
