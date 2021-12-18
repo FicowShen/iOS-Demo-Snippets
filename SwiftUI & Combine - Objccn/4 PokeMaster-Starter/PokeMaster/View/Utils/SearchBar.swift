@@ -26,6 +26,7 @@ struct SearchBar: View {
                 .onTapGesture {
                     self.isEditing = true
                 }
+                .animation(.default)
 
             if isEditing {
                 Button(action: {
