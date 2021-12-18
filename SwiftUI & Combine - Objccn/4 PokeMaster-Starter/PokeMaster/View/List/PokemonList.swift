@@ -10,6 +10,8 @@ import SwiftUI
 
 struct PokemonList: View {
 
+    @State private var text = ""
+
     @State var expandingIndex: Int?
 
     var body: some View {
@@ -19,6 +21,8 @@ struct PokemonList: View {
 //            PokemonInfoRow(model: pokemon, expanded: false)
 //        }
         ScrollView {
+            SearchBar(text: $text)
+                .padding()
             ForEach(PokemonViewModel.all) { pokemon in
                 PokemonInfoRow(model: pokemon,
                                expanded: self.expandingIndex == pokemon.id)
@@ -34,7 +38,8 @@ struct PokemonList: View {
                         }
                     }
             }
-        }.overlay(
+        }
+        .overlay(
             VStack {
                 Spacer()
                 PokemonInfoPanel(model: .sample(id: 1))
