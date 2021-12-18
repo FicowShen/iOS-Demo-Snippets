@@ -13,28 +13,26 @@ struct BlurView: UIViewRepresentable {
 
     let style: UIBlurEffect.Style
 
+    init(style: UIBlurEffect.Style) {
+        print("init blur view")
+        self.style = style
+    }
+
     func makeUIView(
         context: UIViewRepresentableContext<BlurView>
     ) -> UIView {
-        let view = UIView(frame: .zero)
-        view.backgroundColor = .clear
-        let blurEffect = UIBlurEffect(style: style)
-        let blurView = UIVisualEffectView(effect: blurEffect)
-
-        blurView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(blurView)
-        NSLayoutConstraint.activate([
-            blurView.heightAnchor
-                .constraint(equalTo: view.heightAnchor),
-            blurView.widthAnchor
-                .constraint(equalTo: view.widthAnchor)
-        ])
-        return view
+        UIVisualEffectView()
     }
 
     func updateUIView(
         _ uiView: UIView,
         context: UIViewRepresentableContext<BlurView>) {
+        print("Update UIView")
+        print("style:", style.rawValue)
+        guard let view = uiView as? UIVisualEffectView else {
+            return
+        }
+        view.effect = UIBlurEffect(style: style)
     }
 }
 
