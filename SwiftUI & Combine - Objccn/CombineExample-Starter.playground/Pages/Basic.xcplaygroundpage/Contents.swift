@@ -4,6 +4,86 @@ enum MyError: Error {
     case myError
 }
 
+//check("Test FlatMap") {
+//    [1: "A", 2: "B", 10: "C"]
+//        .timerPublisher
+//        .flatMap { l in
+//            [1: 1, 3: 2, 5: 3]
+//                .timerPublisher
+//                .map {
+//                    "\(l)\($0)"
+//                }
+//        }
+//}
+
+
+check("Merge") {
+    [1: "A", 3: "C", 5: "E"]
+        .timerPublisher
+        .merge(with: [
+            2: "B", 4: "D", 6: "F"].timerPublisher
+        )
+}
+
+
+check("collect") {
+    (1...5).publisher.collect(2)
+}
+
+
+check("allSatisfy") {
+    (1...5).publisher.allSatisfy { $0 > 2 }
+}
+
+
+check("max") {
+    (1...5).publisher.max()
+}
+
+
+check("min") {
+    (1...5).publisher.min()
+}
+
+
+check("ReplaceEmpty") {
+    Empty<Int, Never>()
+        .replaceEmpty(with: 0)
+}
+
+
+check("ReplaceNil") {
+    [1,nil,3].publisher
+        .replaceNil(with: 0)
+}
+
+
+check("Drop") {
+    [1,2,3].publisher
+        .print("[Original]")
+        .drop(while: { $0 < 3 })
+}
+
+
+check("Prefix") {
+    [1,2,3].publisher
+        .prefix(2)
+}
+
+
+check("Contains") {
+    [1,2,3,4,5].publisher
+        .print("[Original]")
+        .contains(13)
+}
+
+
+check("Filter") {
+  [1,2,3,4,5].publisher
+    .print("[Original]")
+    .filter { $0 % 2 == 0 }
+}
+
 
 check("Catch and Continue") {
     ["1", "2", "Switf", "4"]
