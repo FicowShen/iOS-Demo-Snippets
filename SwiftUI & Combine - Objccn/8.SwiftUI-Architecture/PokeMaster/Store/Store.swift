@@ -15,18 +15,34 @@ class Store: ObservableObject {
     static func reduce(
         state: AppState,
         action: AppAction
-    ) -> AppState
+    ) -> (AppState, AppCommand?)
     {
         var appState = state
+        var appCommand: AppCommand?
 
         switch action {
         case .login(let email, let password):
-            if password == "password" {
-                let user = User(email: email, favoritePokemonIDs: [])
+            guard !appState.settings.loginRequesting else {
+                break
+            }
+            appState.settings.loginRequesting = true
+//            if password == "password" {
+//                let user = User(email: email, favoritePokemonIDs: [])
+//                appState.settings.loginUser = user
+//            }
+            appCommand = LoginAppCommand(
+                email: email, password: password
+            )
+        case .accountBehaviorDone(let result):
+            appState.settings.loginRequesting = false
+            switch result {
+            case .success(let user):
                 appState.settings.loginUser = user
+            case .failure(let error):
+                appState.settings.loginError = error
             }
         }
-        return appState
+        return (appState, appCommand)
     }
 
     func dispatch(_ action: AppAction) {
@@ -34,6 +50,13 @@ class Store: ObservableObject {
         print("[ACTION]: \(action)")
         #endif
         let result = Store.reduce(state: appState, action: action)
-        appState = result
+        appState = result.0
+
+        if let command = result.1 {
+            #if DEBUG
+            print("[COMMAND]: \(command)")
+            #endif
+            command.execute(in: self)
+        }
     }
 }
