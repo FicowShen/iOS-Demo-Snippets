@@ -64,7 +64,10 @@ struct SettingView: View {
                     SecureField("确认密码", text: settingsBinding.verifyPassword)
                 }
                 Button(settings.accountBehavior.text) {
-                    print("登录/注册")
+                    self.store.dispatch(
+                        .login(email: self.settings.email,
+                               password: self.settings.password)
+                    )
                 }
             } else {
                 Text(settings.loginUser!.email)

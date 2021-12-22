@@ -9,6 +9,7 @@
 import Combine
 
 class Store: ObservableObject {
+
     @Published var appState = AppState()
 
     static func reduce(
@@ -26,5 +27,13 @@ class Store: ObservableObject {
             }
         }
         return appState
+    }
+
+    func dispatch(_ action: AppAction) {
+        #if DEBUG
+        print("[ACTION]: \(action)")
+        #endif
+        let result = Store.reduce(state: appState, action: action)
+        appState = result
     }
 }
