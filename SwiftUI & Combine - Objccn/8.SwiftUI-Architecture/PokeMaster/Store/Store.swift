@@ -26,10 +26,6 @@ class Store: ObservableObject {
                 break
             }
             appState.settings.loginRequesting = true
-//            if password == "password" {
-//                let user = User(email: email, favoritePokemonIDs: [])
-//                appState.settings.loginUser = user
-//            }
             appCommand = LoginAppCommand(
                 email: email, password: password
             )
@@ -41,6 +37,8 @@ class Store: ObservableObject {
             case .failure(let error):
                 appState.settings.loginError = error
             }
+        case .logout:
+            appState.settings.loginUser = nil
         }
         return (appState, appCommand)
     }

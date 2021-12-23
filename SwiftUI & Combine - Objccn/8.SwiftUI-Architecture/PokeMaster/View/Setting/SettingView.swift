@@ -81,7 +81,7 @@ struct SettingView: View {
             } else {
                 Text(settings.loginUser!.email)
                 Button("注销") {
-                    print("注销")
+                    self.store.dispatch(.logout)
                 }
             }
 
