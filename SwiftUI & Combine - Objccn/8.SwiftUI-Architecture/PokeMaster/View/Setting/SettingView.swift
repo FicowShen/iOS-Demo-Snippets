@@ -67,7 +67,7 @@ struct SettingView: View {
                     SecureField("确认密码", text: settingsBinding.verifyPassword)
                 }
                 if settings.loginRequesting {
-                    Text("登录中...")
+                    ActivityIndicatorView(style: .medium)
                 } else {
                     Button(settings.accountBehavior.text) {
                         self.store.dispatch(
