@@ -17,8 +17,13 @@ extension AppState {
         enum Sorting: CaseIterable {
             case id, name, color, favorite
         }
-        var showEnglishName = true
-        var sorting = Sorting.id
+
+        @UserDefaultStorage(key: "showEnglishName", defaultValue: true)
+        var showEnglishName: Bool
+
+        @UserDefaultStorage(key: "sorting", defaultValue: .id)
+        var sorting: Sorting
+
         var showFavoriteOnly = false
 
         enum AccountBehavior: CaseIterable {

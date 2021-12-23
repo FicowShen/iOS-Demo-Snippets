@@ -21,6 +21,7 @@
 		6A1480842773F53A00F8BB09 /* WriteUserAppCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1480832773F53A00F8BB09 /* WriteUserAppCommand.swift */; };
 		6A1480862773F71900F8BB09 /* FileStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1480852773F71900F8BB09 /* FileStorage.swift */; };
 		6A1480882773FA5700F8BB09 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A1480872773FA5700F8BB09 /* ActivityIndicatorView.swift */; };
+		6AB1E8142774BC3200B5EF40 /* UserDefaultStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6AB1E8132774BC3200B5EF40 /* UserDefaultStorage.swift */; };
 		D1320AD523178614006F02A6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D1320A7D23178614006F02A6 /* Assets.xcassets */; };
 		D1320AD623178614006F02A6 /* FileHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1320A7F23178614006F02A6 /* FileHelper.swift */; };
 		D1320AD723178614006F02A6 /* Sample.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1320A8023178614006F02A6 /* Sample.swift */; };
@@ -123,6 +124,7 @@
 		6A1480832773F53A00F8BB09 /* WriteUserAppCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteUserAppCommand.swift; sourceTree = "<group>"; };
 		6A1480852773F71900F8BB09 /* FileStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileStorage.swift; sourceTree = "<group>"; };
 		6A1480872773FA5700F8BB09 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
+		6AB1E8132774BC3200B5EF40 /* UserDefaultStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultStorage.swift; sourceTree = "<group>"; };
 		D1320A7D23178614006F02A6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D1320A7F23178614006F02A6 /* FileHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FileHelper.swift; sourceTree = "<group>"; };
 		D1320A8023178614006F02A6 /* Sample.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sample.swift; sourceTree = "<group>"; };
@@ -324,6 +326,7 @@
 				D1320A8123178614006F02A6 /* Helpers.swift */,
 				6A1480812772AA9F00F8BB09 /* SubscriptionToken.swift */,
 				6A1480852773F71900F8BB09 /* FileStorage.swift */,
+				6AB1E8132774BC3200B5EF40 /* UserDefaultStorage.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -672,6 +675,7 @@
 				D1320AD723178614006F02A6 /* Sample.swift in Sources */,
 				6A14806C276F774900F8BB09 /* MainTab.swift in Sources */,
 				6A1480772771556400F8BB09 /* AppAction.swift in Sources */,
+				6AB1E8142774BC3200B5EF40 /* UserDefaultStorage.swift in Sources */,
 				D1320B1923178614006F02A6 /* AbilityViewModel.swift in Sources */,
 				D1D7EEAE231C002900A52D3D /* SettingView.swift in Sources */,
 				D1320B1E23178614006F02A6 /* PokemonSpecies.swift in Sources */,
