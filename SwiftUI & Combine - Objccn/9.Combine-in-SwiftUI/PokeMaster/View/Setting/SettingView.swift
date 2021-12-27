@@ -44,15 +44,20 @@ struct SettingView: View {
                 if settings.checker.accountBehavior == .register {
                     SecureField("确认密码", text: settingsBinding.checker.verifyPassword)
                 }
-                if settings.loginRequesting {
-                    Text("登录中...")
+                if settings.accountValidating {
+                    Text("\(settings.checker.accountBehavior.text)中...")
                 } else {
                     Button(settings.checker.accountBehavior.text) {
                         self.store.dispatch(
-                            .login(
-                                email: self.settings.checker.email,
-                                password: self.settings.checker.password
-                            )
+                            settings.checker.accountBehavior == .register
+                                ? .register(
+                                    email: self.settings.checker.email,
+                                    password: self.settings.checker.password
+                                )
+                                : .login(
+                                    email: self.settings.checker.email,
+                                    password: self.settings.checker.password
+                                )
                         )
                     }
                     .disabled(

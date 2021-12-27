@@ -45,12 +45,16 @@ class Store: ObservableObject {
         var appCommand: AppCommand?
 
         switch action {
+        case .register(let email, let password):
+            guard !appState.settings.accountValidating else { break }
+            appState.settings.accountValidating = true
+            appCommand = RegisterAppCommand(email: email, password: password)
         case .login(let email, let password):
-            guard !appState.settings.loginRequesting else { break }
-            appState.settings.loginRequesting = true
+            guard !appState.settings.accountValidating else { break }
+            appState.settings.accountValidating = true
             appCommand = LoginAppCommand(email: email, password: password)
         case .accountBehaviorDone(let result):
-            appState.settings.loginRequesting = false
+            appState.settings.accountValidating = false
             switch result {
             case .success(let user):
                 appState.settings.loginUser = user

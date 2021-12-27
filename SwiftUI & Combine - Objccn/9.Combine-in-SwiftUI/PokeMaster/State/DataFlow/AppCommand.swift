@@ -42,6 +42,35 @@ struct LoginAppCommand: AppCommand {
     }
 }
 
+struct RegisterAppCommand: AppCommand {
+    let email: String
+    let password: String
+
+    func execute(in store: Store) {
+        let token = SubscriptionToken()
+        RegisterRequest(
+            email: email,
+            password: password
+        ).publisher
+        .sink(
+            receiveCompletion: { complete in
+                if case .failure(let error) = complete {
+                    store.dispatch(
+                        .accountBehaviorDone(result: .failure(error))
+                    )
+                }
+                token.unseal()
+            },
+            receiveValue: { user in
+                store.dispatch(
+                    .accountBehaviorDone(result: .success(user))
+                )
+            }
+        )
+        .seal(in: token)
+    }
+}
+
 struct LoadPokemonsCommand: AppCommand {
     func execute(in store: Store) {
         let token = SubscriptionToken()

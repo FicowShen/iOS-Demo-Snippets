@@ -40,7 +40,7 @@ extension AppState {
         @FileStorage(directory: .documentDirectory, fileName: "user.json")
         var loginUser: User?
 
-        var loginRequesting = false
+        var accountValidating = false
         var loginError: AppError?
     }
 }
