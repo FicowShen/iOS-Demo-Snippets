@@ -55,6 +55,10 @@ struct SettingView: View {
                             )
                         )
                     }
+                    .disabled(
+                        settings.checker.accountBehavior == .register
+                            && !settings.isRegisterValid
+                    )
                 }
             } else {
                 Text(settings.loginUser!.email)

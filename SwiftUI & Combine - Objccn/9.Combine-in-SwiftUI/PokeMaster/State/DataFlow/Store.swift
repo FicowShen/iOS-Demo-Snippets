@@ -21,6 +21,9 @@ class Store: ObservableObject {
         appState.settings.checker.isEmailValid.sink { isValid in
             self.dispatch(.emailValid(valid: isValid))
         }.store(in: &disposeBag)
+        appState.settings.checker.isRegisterValid.sink { enabled in
+            self.dispatch(.isRegisterValid(valid: enabled))
+        }.store(in: &disposeBag)
     }
 
     func dispatch(_ action: AppAction) {
@@ -73,6 +76,8 @@ class Store: ObservableObject {
             case .failure(let error):
                 print(error)
             }
+        case .isRegisterValid(let valid):
+            appState.settings.isRegisterValid = valid
         }
 
         return (appState, appCommand)

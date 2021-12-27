@@ -26,6 +26,7 @@ extension AppState {
 
         var checker = AccountChecker()
         var isEmailValid = false
+        var isRegisterValid = false
 
         //        var accountBehavior = AccountBehavior.login
         //        var email = ""
@@ -82,6 +83,18 @@ extension AppState {
             )
             .map { $0 && ($1 || $2) }
             .eraseToAnyPublisher()
+        }
+
+        var isPasswordValid: AnyPublisher<Bool, Never> {
+            $password.combineLatest($verifyPassword) { a, b in
+                !a.isEmpty && !b.isEmpty && a == b
+            }.eraseToAnyPublisher()
+        }
+
+        var isRegisterValid: AnyPublisher<Bool, Never> {
+            isEmailValid
+                .combineLatest(isPasswordValid) { $0 && $1 }
+                .eraseToAnyPublisher()
         }
 
     }
