@@ -82,6 +82,9 @@ class Store: ObservableObject {
             }
         case .isRegisterValid(let valid):
             appState.settings.isRegisterValid = valid
+        case .clearCache:
+            appState.pokemonList.pokemons = nil
+            appState.pokemonList.loadingPokemons = false
         }
 
         return (appState, appCommand)

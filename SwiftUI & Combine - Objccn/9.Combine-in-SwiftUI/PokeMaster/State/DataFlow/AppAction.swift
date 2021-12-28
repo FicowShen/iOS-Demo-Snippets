@@ -19,4 +19,5 @@ enum AppAction {
             result: Result<[PokemonViewModel], AppError>
          )
     case isRegisterValid(valid: Bool)
+    case clearCache
 }
