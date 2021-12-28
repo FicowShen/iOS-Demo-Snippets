@@ -66,10 +66,10 @@ class Store: ObservableObject {
         case .emailValid(let valid):
             appState.settings.isEmailValid = valid
         case .loadPokemons:
-            if appState.pokemonList.loadingPokemons {
+            if case .loading = appState.pokemonList.loadingStatus {
                 break
             }
-            appState.pokemonList.loadingPokemons = true
+            appState.pokemonList.loadingStatus = .loading
             appCommand = LoadPokemonsCommand()
         case .loadPokemonsDone(let result):
             switch result {
@@ -77,14 +77,16 @@ class Store: ObservableObject {
                 appState.pokemonList.pokemons = Dictionary(
                     uniqueKeysWithValues: models.map { ($0.id, $0) }
                 )
+                appState.pokemonList.loadingStatus = .loaded
             case .failure(let error):
                 print(error)
+                appState.pokemonList.loadingStatus = .failed(error)
             }
         case .isRegisterValid(let valid):
             appState.settings.isRegisterValid = valid
         case .clearCache:
             appState.pokemonList.pokemons = nil
-            appState.pokemonList.loadingPokemons = false
+            appState.pokemonList.loadingStatus = .toLoad
         }
 
         return (appState, appCommand)

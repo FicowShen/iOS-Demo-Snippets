@@ -102,12 +102,15 @@ extension AppState {
 
 extension AppState {
     struct PokemonList {
+        enum Status {
+            case toLoad, loading, loaded, failed(Error)
+        }
         @FileStorage(
             directory: .cachesDirectory,
             fileName: "pokemons.json"
         )
         var pokemons: [Int: PokemonViewModel]?
-        var loadingPokemons = false
+        var loadingStatus: Status = .toLoad
 
         var allPokemonsByID: [PokemonViewModel] {
             guard let pokemons = pokemons?.values else {
