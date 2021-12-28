@@ -11,18 +11,19 @@ import SwiftUI
 struct PokemonList: View {
     @EnvironmentObject var store: Store
 
-    @State var expandingIndex: Int?
-    @State var searchText: String = ""
+    private var expandingIndex: Int? {
+        store.appState.pokemonList.operation.expandingIndex
+    }
 
     var body: some View {
         ScrollView {
-            TextField("搜索", text: $searchText)
+            TextField("搜索", text: $store.appState.pokemonList.operation.searchText)
                 .frame(height: 40)
                 .padding(.horizontal, 25)
             ForEach(store.appState.pokemonList.allPokemonsByID) { pokemon in
                 PokemonInfoRow(
                     model: pokemon,
-                    expanded: self.expandingIndex == pokemon.id
+                    expanded: expandingIndex == pokemon.id
                 )
                 .onTapGesture {
                     withAnimation(
@@ -33,11 +34,9 @@ struct PokemonList: View {
                         )
                     )
                     {
-                        if self.expandingIndex == pokemon.id {
-                            self.expandingIndex = nil
-                        } else {
-                            self.expandingIndex = pokemon.id
-                        }
+                        store.dispatch(
+                            .toggleListSelection(index: pokemon.id)
+                        )
                     }
                 }
             }

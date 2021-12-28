@@ -111,6 +111,7 @@ extension AppState {
         )
         var pokemons: [Int: PokemonViewModel]?
         var loadingStatus: Status = .toLoad
+        var operation = Operation()
 
         var allPokemonsByID: [PokemonViewModel] {
             guard let pokemons = pokemons?.values else {
@@ -118,5 +119,10 @@ extension AppState {
             }
             return pokemons.sorted { $0.id < $1.id }
         }
+    }
+
+    final class Operation {
+        @Published var expandingIndex: Int?
+        @Published var searchText: String = ""
     }
 }

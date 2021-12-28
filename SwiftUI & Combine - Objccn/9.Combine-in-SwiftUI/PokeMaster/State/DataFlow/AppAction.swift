@@ -20,4 +20,5 @@ enum AppAction {
          )
     case isRegisterValid(valid: Bool)
     case clearCache
+    case toggleListSelection(index: Int)
 }
