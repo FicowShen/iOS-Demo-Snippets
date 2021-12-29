@@ -109,6 +109,8 @@ extension AppState {
 
         var searchText = ""
 
+        var isSFViewActive = false
+
         func displayPokemons(with settings: Settings) -> [PokemonViewModel] {
 
             func isFavorite(_ pokemon: PokemonViewModel) -> Bool {

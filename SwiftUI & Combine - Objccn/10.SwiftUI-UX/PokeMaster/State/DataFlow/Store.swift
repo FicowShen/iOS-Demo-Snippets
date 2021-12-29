@@ -107,6 +107,8 @@ class Store: ObservableObject {
         case .clearCache:
             appState.pokemonList.pokemons = nil
             appState.pokemonList.abilities = nil
+        case .closeSafariView:
+            appState.pokemonList.isSFViewActive = false
         }
 
         return (appState, appCommand)
