@@ -10,8 +10,19 @@ import Combine
 import Foundation
 
 struct AppState {
+    var mainTab = MainTab()
     var settings = Settings()
     var pokemonList = PokemonList()
+}
+
+extension AppState {
+    struct MainTab {
+        enum Index: Hashable {
+            case list, settings
+        }
+
+        var selection: Index = .list
+    }
 }
 
 extension AppState {
