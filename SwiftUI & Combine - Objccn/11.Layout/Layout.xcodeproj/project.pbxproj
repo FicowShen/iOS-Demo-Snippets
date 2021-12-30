@@ -18,6 +18,7 @@
 		6A3D7CB9277CA5E400A49BB9 /* LayoutUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D7CB8277CA5E400A49BB9 /* LayoutUITestsLaunchTests.swift */; };
 		6A3D7CC6277CA60900A49BB9 /* TriangleArrow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D7CC5277CA60900A49BB9 /* TriangleArrow.swift */; };
 		6A3D7CC8277CA79A00A49BB9 /* FlowRectangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D7CC7277CA79A00A49BB9 /* FlowRectangle.swift */; };
+		6A3D7CCA277D2BA300A49BB9 /* RadarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A3D7CC9277D2BA300A49BB9 /* RadarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +53,7 @@
 		6A3D7CB8277CA5E400A49BB9 /* LayoutUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		6A3D7CC5277CA60900A49BB9 /* TriangleArrow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TriangleArrow.swift; sourceTree = "<group>"; };
 		6A3D7CC7277CA79A00A49BB9 /* FlowRectangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowRectangle.swift; sourceTree = "<group>"; };
+		6A3D7CC9277D2BA300A49BB9 /* RadarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 				6A3D7C9C277CA5E400A49BB9 /* Preview Content */,
 				6A3D7CC5277CA60900A49BB9 /* TriangleArrow.swift */,
 				6A3D7CC7277CA79A00A49BB9 /* FlowRectangle.swift */,
+				6A3D7CC9277D2BA300A49BB9 /* RadarView.swift */,
 			);
 			path = Layout;
 			sourceTree = "<group>";
@@ -271,6 +274,7 @@
 			files = (
 				6A3D7CA0277CA5E400A49BB9 /* Persistence.swift in Sources */,
 				6A3D7CC8277CA79A00A49BB9 /* FlowRectangle.swift in Sources */,
+				6A3D7CCA277D2BA300A49BB9 /* RadarView.swift in Sources */,
 				6A3D7CA3277CA5E400A49BB9 /* Layout.xcdatamodeld in Sources */,
 				6A3D7C99277CA5E100A49BB9 /* ContentView.swift in Sources */,
 				6A3D7CC6277CA60900A49BB9 /* TriangleArrow.swift in Sources */,
