@@ -15,15 +15,42 @@ extension PokemonInfoPanel {
         let model: PokemonViewModel
 
         var body: some View {
-            HStack(spacing: 18) {
+            ZStack(alignment: .select) {
                 pokemonIcon
-                nameSpecies
-                verticalDivider
-                VStack(spacing: 12) {
-                    bodyStatus
-                    typeInfo
+                    .alignmentGuide(.horizontalSelect) { d in
+                        d[HorizontalAlignment.leading] + 15
+                    }
+                    .alignmentGuide(.verticalSelect) { d in
+                        d[VerticalAlignment.bottom] + d.height / 3 * 2
+                    }
+                HStack {
+                    nameSpecies
+                    verticalDivider
+                        .padding([.leading, .trailing], 20)
+                    VStack(spacing: 12) {
+                        bodyStatus
+                        typeInfo
+                    }
+                }
+                .alignmentGuide(.horizontalSelect) { d in
+                    d[HorizontalAlignment.leading]
+                }
+                .alignmentGuide(.verticalSelect) { d in
+                    d[VerticalAlignment.center]
                 }
             }
+//            HStack(alignment: .verticalSelect, spacing: 18) {
+//                pokemonIcon
+//                    .alignmentGuide(.verticalSelect) { d in
+//                        d[VerticalAlignment.bottom]
+//                    }
+//                nameSpecies
+//                verticalDivider
+//                VStack(spacing: 12) {
+//                    bodyStatus
+//                    typeInfo
+//                }
+//            }
         }
 
         var pokemonIcon: some View {
@@ -33,8 +60,8 @@ extension PokemonInfoPanel {
         }
 
         var nameSpecies: some View {
-            VStack(spacing: 10) {
-                VStack {
+            VStack(alignment: .horizontalSelect, spacing: 10) {
+                VStack(alignment: .horizontalSelect) {
                     Text(model.name)
                         .font(.system(size: 22))
                         .fontWeight(.bold)
@@ -43,11 +70,20 @@ extension PokemonInfoPanel {
                         .font(.system(size: 13))
                         .fontWeight(.bold)
                         .foregroundColor(model.color)
+                        .alignmentGuide(.horizontalSelect) { d in
+                            d[HorizontalAlignment.leading]
+                        }
+                }
+                .alignmentGuide(.horizontalSelect) { d in
+                    d[HorizontalAlignment.trailing]
                 }
                 Text(model.genus)
                     .font(.system(size: 13))
                     .fontWeight(.bold)
                     .foregroundColor(.gray)
+                    .alignmentGuide(.horizontalSelect) { d in
+                        d[HorizontalAlignment.trailing]
+                    }
             }
         }
 
@@ -98,7 +134,7 @@ extension PokemonInfoPanel {
 #if DEBUG
 struct PokemonInfoPanelHeader_Previews: PreviewProvider {
     static var previews: some View {
-        PokemonInfoPanel.Header(model: .sample(id: 1))
+        PokemonInfoPanel.Header(model: .sample(id: 2))
     }
 }
 #endif

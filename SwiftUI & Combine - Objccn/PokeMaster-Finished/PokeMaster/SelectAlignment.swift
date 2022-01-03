@@ -1,15 +1,5 @@
 import SwiftUI
 
-extension VerticalAlignment {
-    struct SelectAlignment: AlignmentID {
-        static func defaultValue(in context: ViewDimensions) -> CGFloat {
-            context[VerticalAlignment.center]
-        }
-    }
-
-    static let select = VerticalAlignment(SelectAlignment.self)
-}
-
 struct VerticalAlignmentContentView: View {
 
     @State var selectedIndex = 0
@@ -21,17 +11,17 @@ struct VerticalAlignmentContentView: View {
     ]
 
     var body: some View {
-        HStack(alignment: .select) {
+        HStack(alignment: .verticalSelect) {
             Text("User:")
                 .font(.footnote)
                 .foregroundColor(.green)
-                .alignmentGuide(.select) { d in
+                .alignmentGuide(.verticalSelect) { d in
                     // 以底部为基准，再加上选中的行到整个 HStack 上端的总高度
                     d[.bottom] + CGFloat(self.selectedIndex) * 20.3
                 }
             Image(systemName: "person.circle")
                 .foregroundColor(.green)
-                .alignmentGuide(.select) { d in
+                .alignmentGuide(.verticalSelect) { d in
                     // Image 的中心部位应该和其他部分对齐
                     d[VerticalAlignment.center]
                 }
@@ -41,7 +31,7 @@ struct VerticalAlignmentContentView: View {
                         if index == self.selectedIndex {
                             Text(self.names[index])
                                 .foregroundColor(.green)
-                                .alignmentGuide(.select) { d in
+                                .alignmentGuide(.verticalSelect) { d in
                                     // 把被选中行的中线位置设定成了对齐位置
                                     d[VerticalAlignment.center]
                                 }
