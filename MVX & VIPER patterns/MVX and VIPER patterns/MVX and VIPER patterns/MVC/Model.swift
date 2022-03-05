@@ -7,8 +7,10 @@
 
 import Foundation
 
+fileprivate let TestURL = URL(string: "https://baidu.com")!
+
 class MVCUserProfile {
-    static let updateNameURL = URL(string: "...")!
+    static let updateNameURL = TestURL
 
     let id: UUID
     var name: String
@@ -29,15 +31,8 @@ class MVCUserProfile {
 }
 
 
-protocol DataTaskMaker: AnyObject {
-    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
-}
-
-// 让 URLSession 实现协议，便于注入
-extension URLSession: DataTaskMaker {}
-
 class TestableMVCUserProfile {
-    static let updateNameURL = URL(string: "...")!
+    static let updateNameURL = TestURL
 
     let id: UUID
     var name: String
@@ -55,6 +50,6 @@ class TestableMVCUserProfile {
                 self?.name = newName
             }
             completion(error)
-        }.resume()
+        }
     }
 }

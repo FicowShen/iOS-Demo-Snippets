@@ -10,16 +10,9 @@ import UIKit
 class MVCViewController: UIViewController {
 
     var userProfile: MVCUserProfile?
-    private let nameLabel = UILabel()
     private let indicator = UIActivityIndicatorView()
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        // ...
-    }
-
+    // ViewController 负责接收 UI 交互事件，然后调用 Model 的方法处理数据，最终将返回结果展示到 View 上
     func saveNewName(_ name: String) {
         indicator.startAnimating()
         userProfile?.updateName(name) { [weak self] error in
@@ -39,14 +32,28 @@ class MVCViewController: UIViewController {
     func showError(_ error: Error) {
         // ...
     }
-
 }
 
+protocol DataTaskMaker: AnyObject {
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void)
+}
+
+class DefaultDataTaskMaker: DataTaskMaker {
+    let session = URLSession(configuration: .default)
+
+    func dataTask(with url: URL, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) {
+        session
+            .dataTask(with: url, completionHandler: completionHandler)
+            .resume()
+    }
+}
 
 class TestableMVCViewController: UIViewController {
-    var taskMaker: DataTaskMaker = URLSession(configuration: .default)
+    // taskMaker 可以被替换为其他遵守 DataTaskMaker 协议的对象
+    var taskMaker: DataTaskMaker = DefaultDataTaskMaker()
+
     var userProfile: TestableMVCUserProfile?
-    private let nameLabel = UILabel()
+    let resultLabel = UILabel()
     private let indicator = UIActivityIndicatorView()
 
     override func viewDidLoad() {
@@ -69,10 +76,10 @@ class TestableMVCViewController: UIViewController {
     }
 
     func showSuccess() {
-        // ...
+        resultLabel.text = "success"
     }
 
     func showError(_ error: Error) {
-        // ...
+        resultLabel.text = error.localizedDescription
     }
 }
