@@ -14,6 +14,10 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+    @IBAction func launchDependencyInjectionDemo(_ sender: Any) {
+        let controller = DIController()
+        navigationController?.pushViewController(controller, animated: true)
+    }
 
 }
 
