@@ -18,7 +18,9 @@ final class DIUserInfoLoader: DIUserInfoLoaderConvertible {
 
     private let userInfoCacheKey = "DIUserInfoLoader.userInfoCacheKey"
     private let userInfoRequest: URLRequest = {
+        // Great! We can use this free tool to save our JSON online easily:
         // https://www.npoint.io/docs/e0ce0dc1024c69a5e6b0
+        // Thanks the author!
         var request = URLRequest(url: URL(string: "https://api.npoint.io/e0ce0dc1024c69a5e6b0")!)
         request.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
         return request

@@ -22,6 +22,7 @@
 		6A33020527F0105400A2A0AD /* DIUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A33020427F0105400A2A0AD /* DIUser.swift */; };
 		6A33020927F011BB00A2A0AD /* DIController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A33020827F011BB00A2A0AD /* DIController.swift */; };
 		6A33020B27F011CC00A2A0AD /* DIUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A33020A27F011CC00A2A0AD /* DIUserInfoView.swift */; };
+		6A33020D27F13C8700A2A0AD /* DIControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A33020C27F13C8700A2A0AD /* DIControllerTests.swift */; };
 		6ABA5A3F27D3627800E2AA0F /* TestableMVCViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ABA5A3E27D3627800E2AA0F /* TestableMVCViewControllerTests.swift */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +65,7 @@
 		6A33020427F0105400A2A0AD /* DIUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIUser.swift; sourceTree = "<group>"; };
 		6A33020827F011BB00A2A0AD /* DIController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIController.swift; sourceTree = "<group>"; };
 		6A33020A27F011CC00A2A0AD /* DIUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIUserInfoView.swift; sourceTree = "<group>"; };
+		6A33020C27F13C8700A2A0AD /* DIControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIControllerTests.swift; sourceTree = "<group>"; };
 		6ABA5A3E27D3627800E2AA0F /* TestableMVCViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableMVCViewControllerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,6 +140,7 @@
 				6A32122027291FF100E2B1D2 /* MVX_and_VIPER_patternsTests.swift */,
 				6A32122227291FF100E2B1D2 /* Info.plist */,
 				6ABA5A3E27D3627800E2AA0F /* TestableMVCViewControllerTests.swift */,
+				6A33020C27F13C8700A2A0AD /* DIControllerTests.swift */,
 			);
 			path = "MVX and VIPER patternsTests";
 			sourceTree = "<group>";
@@ -356,6 +359,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A32122127291FF100E2B1D2 /* MVX_and_VIPER_patternsTests.swift in Sources */,
+				6A33020D27F13C8700A2A0AD /* DIControllerTests.swift in Sources */,
 				6ABA5A3F27D3627800E2AA0F /* TestableMVCViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

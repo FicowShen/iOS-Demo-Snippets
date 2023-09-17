@@ -457,6 +457,6 @@ struct ColorLabel: View {
 struct TryAlignmentGuides_Previews: PreviewProvider {
     static var previews: some View {
         CustomView()
-        TryAlignmentGuides().previewDevice("com.apple.CoreSimulator.SimDeviceType.iPad-Pro--9-7-inch-")
+//        TryAlignmentGuides().previewDevice("com.apple.CoreSimulator.SimDeviceType.iPad-Pro--9-7-inch-")
     }
 }
