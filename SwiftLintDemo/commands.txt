@@ -1,0 +1,6 @@
+swiftlint lint
+swiftlint rules -e
+swiftlint rules -c
+swiftlint autocorrect --fix --format
+
+swiftlint lint | grep -o '([A-Za-z].*)' | sed 's/[()]//g' | uniq -c
