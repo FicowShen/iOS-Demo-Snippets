@@ -13,7 +13,7 @@
 		6A434C6D2AB739520031588F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A434C6B2AB739520031588F /* Main.storyboard */; };
 		6A434C6F2AB739540031588F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6A434C6E2AB739540031588F /* Assets.xcassets */; };
 		6A434C722AB739540031588F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6A434C702AB739540031588F /* LaunchScreen.storyboard */; };
-		6A434C7B2AB7E2810031588F /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A434C7A2AB7E2810031588F /* ViewModel.swift */; };
+		6A434C7B2AB7E2810031588F /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A434C7A2AB7E2810031588F /* Model.swift */; };
 		6AD4329D7F710F3F57D500E2 /* Pods_SwiftLintDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 51039338D14515CB895DAD55 /* Pods_SwiftLintDemo.framework */; };
 /* End PBXBuildFile section */
 
@@ -28,7 +28,7 @@
 		6A434C6E2AB739540031588F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6A434C712AB739540031588F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6A434C732AB739540031588F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6A434C7A2AB7E2810031588F /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		6A434C7A2AB7E2810031588F /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		85A2DE10D9FBB6B151F0D83C /* Pods-SwiftLintDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SwiftLintDemo.debug.xcconfig"; path = "Target Support Files/Pods-SwiftLintDemo/Pods-SwiftLintDemo.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -81,7 +81,7 @@
 				6A434C6E2AB739540031588F /* Assets.xcassets */,
 				6A434C702AB739540031588F /* LaunchScreen.storyboard */,
 				6A434C732AB739540031588F /* Info.plist */,
-				6A434C7A2AB7E2810031588F /* ViewModel.swift */,
+				6A434C7A2AB7E2810031588F /* Model.swift */,
 			);
 			path = SwiftLintDemo;
 			sourceTree = "<group>";
@@ -212,7 +212,7 @@
 			files = (
 				6A434C6A2AB739520031588F /* ViewController.swift in Sources */,
 				6A434C662AB739520031588F /* AppDelegate.swift in Sources */,
-				6A434C7B2AB7E2810031588F /* ViewModel.swift in Sources */,
+				6A434C7B2AB7E2810031588F /* Model.swift in Sources */,
 				6A434C682AB739520031588F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

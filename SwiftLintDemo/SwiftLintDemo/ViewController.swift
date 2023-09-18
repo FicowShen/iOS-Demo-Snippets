@@ -9,18 +9,20 @@ import UIKit
 
 class ViewController   :  UIViewController {
 
-    // explicit_init
-    private(set) var viewModel = ViewModel.init(title: String.init("Test"))
+    private(set) var models :  [Model] = [Model]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
 
-        self.title = viewModel.title
+        self.setupModels()
     }
 
-    func convertValues(a: Int ,  b: Int,  c: Int) -> [String] { // comma, identifier_name
-        return [a, b, c].compactMap { String.init($0) } // explicit_init
+    func setupModels()   {
+        models.append(Model.gz)
+        models.append(Model.xa)
+
+        // TODO: <FICOW> handle the display logic
     }
 } // trailing_newline
 
